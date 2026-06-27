@@ -12,14 +12,16 @@
   --font-body: 'Inter', sans-serif;
 
   /* Theme Defaults (Dark Mode is Default for a premium futuristic feel) */
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-  --card-bg: rgba(15, 23, 42, 0.45);
-  --card-border: rgba(255, 255, 255, 0.08);
+  --primary-color: #246dc9;
+  --secondary-color: #272828;
+  --bg-gradient: linear-gradient(135deg, #181919 0%, #11141c 50%, #0c1524 100%);
+  --card-bg: rgba(39, 40, 40, 0.45);
+  --card-border: rgba(36, 109, 201, 0.12);
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --accent-color: #6366f1; /* Indigo */
-  --accent-glow: rgba(99, 102, 241, 0.4);
+  --accent-color: #246dc9; /* Oltag Logo Blue */
+  --accent-glow: rgba(36, 109, 201, 0.4);
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
@@ -29,7 +31,7 @@
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+  --shadow-glow: 0 0 20px rgba(36, 109, 201, 0.2);
   --border-radius-sm: 12px;
   --border-radius-md: 20px;
   --border-radius-lg: 30px;
@@ -43,41 +45,41 @@
 
 /* --- Light Mode Variable Overrides --- */
 [data-theme="light"] {
-  --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 50%, #fae8ff 100%);
-  --card-bg: rgba(255, 255, 255, 0.45);
-  --card-border: rgba(255, 255, 255, 0.6);
+  --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 50%, #dbeafe 100%);
+  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-border: rgba(36, 109, 201, 0.2);
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --accent-color: #4f46e5;
-  --accent-glow: rgba(79, 70, 229, 0.2);
+  --accent-color: #246dc9;
+  --accent-glow: rgba(36, 109, 201, 0.25);
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.1);
+  --shadow-glow: 0 0 20px rgba(36, 109, 201, 0.15);
 }
 
 /* --- Dynamic Weather Gradients (Applied to body background) --- */
 body.weather-sunny {
-  --bg-gradient: linear-gradient(135deg, #ea580c 0%, #eab308 50%, #38bdf8 100%);
+  --bg-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #246dc9 100%);
 }
 body.weather-rain {
-  --bg-gradient: linear-gradient(135deg, #1e293b 0%, #334155 40%, #0f172a 100%);
+  --bg-gradient: linear-gradient(135deg, #272828 0%, #1e293b 50%, #172554 100%);
 }
 body.weather-thunderstorm {
-  --bg-gradient: linear-gradient(135deg, #090514 0%, #1e1b4b 40%, #020617 100%);
+  --bg-gradient: linear-gradient(135deg, #090514 0%, #272828 40%, #0f172a 100%);
 }
 body.weather-snow {
-  --bg-gradient: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
+  --bg-gradient: linear-gradient(135deg, #e2e8f0 0%, #93c5fd 60%, #246dc9 100%);
 }
 body.weather-cloudy {
-  --bg-gradient: linear-gradient(135deg, #334155 0%, #64748b 60%, #cbd5e1 100%);
+  --bg-gradient: linear-gradient(135deg, #272828 0%, #475569 60%, #1e293b 100%);
 }
 body.weather-night {
-  --bg-gradient: linear-gradient(135deg, #030712 0%, #0f172a 50%, #1e1b4b 100%);
+  --bg-gradient: linear-gradient(135deg, #0a0b0b 0%, #111827 50%, #0d1e36 100%);
 }
 body.weather-mist {
-  --bg-gradient: linear-gradient(135deg, #315e6b 0%, #64748b 50%, #e2e8f0 100%);
+  --bg-gradient: linear-gradient(135deg, #272828 0%, #64748b 50%, #94a3b8 100%);
 }
 
 /* --- CSS Reset & Base Styles --- */
@@ -152,12 +154,17 @@ header {
   text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.brand-icon {
-  width: 2.2rem;
+.brand-logo {
   height: 2.2rem;
-  color: var(--accent-color);
+  width: auto;
+  object-fit: contain;
   filter: drop-shadow(0 0 8px var(--accent-glow));
   animation: float 4s ease-in-out infinite;
+  transition: transform var(--transition-fast) var(--transition-easing);
+}
+
+.brand:hover .brand-logo {
+  transform: scale(1.05);
 }
 
 /* Search bar & suggestion dropdown container */
@@ -1170,7 +1177,7 @@ main {
   border-left-color: var(--accent-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .loader-text {
