@@ -1070,6 +1070,7 @@ main {
   background-color: var(--card-bg) !important;
   color: var(--text-primary) !important;
   border-bottom: 1px solid var(--card-border) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
   backdrop-filter: var(--glass-blur) !important;
 }
 .leaflet-bar a:hover {
