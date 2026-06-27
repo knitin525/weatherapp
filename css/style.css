@@ -158,9 +158,13 @@ header {
   height: 2.2rem;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px var(--accent-glow));
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px var(--accent-glow));
   animation: float 4s ease-in-out infinite;
-  transition: transform var(--transition-fast) var(--transition-easing);
+  transition: transform var(--transition-fast) var(--transition-easing), filter var(--transition-fast) var(--transition-easing);
+}
+
+[data-theme="light"] .brand-logo {
+  filter: brightness(0) drop-shadow(0 0 8px rgba(36, 109, 201, 0.15));
 }
 
 .brand:hover .brand-logo {
