@@ -1484,6 +1484,7 @@ input:checked + .switch-slider:before {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
+  -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
 }
 
