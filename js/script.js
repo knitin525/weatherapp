@@ -1013,7 +1013,7 @@ function renderDetailsGrid() {
     const hour = new Date().getHours();
     if (hour > 5 && hour < 19) {
       const sunElevation = Math.sin((hour - 5) / 13 * Math.PI);
-      const isCloudy = w.clouds.all > 50;
+      const isCloudy = (w.clouds ? (w.clouds ? w.clouds.all : 0) : 0) > 50;
       const base = latAbs < 20 ? 11 : (latAbs < 40 ? 8 : 4);
       uvVal = Math.max(0, Math.round(base * sunElevation * (isCloudy ? 0.4 : 1.0)));
     }
@@ -1100,7 +1100,7 @@ function renderDetailsGrid() {
   const cloudValCard = document.getElementById("cloud-cover-value");
   const cloudFooterCard = document.getElementById("cloud-cover-footer");
   if (cloudValCard && cloudFooterCard) {
-    const cloudsPercent = w.clouds.all;
+    const cloudsPercent = w.clouds ? (w.clouds ? w.clouds.all : 0) : 0;
     cloudValCard.textContent = `${cloudsPercent}%`;
     if (cloudsPercent > 70) {
       cloudFooterCard.textContent = "Mostly cloudy, overcast skies";
@@ -1447,6 +1447,9 @@ function generateSimulatedWeatherData(cityName, customLat, customLon) {
       icon: `${activeCondition.icon}d`
     }],
     visibility,
+    clouds: {
+      all: chosenCondition === "Clouds" ? 75 : (chosenCondition === "Clear" ? 10 : 45)
+    },
     timezone
   };
 
@@ -1571,7 +1574,7 @@ function renderWeatherTips() {
     const hour = new Date().getHours();
     if (hour > 5 && hour < 19) {
       const sunElevation = Math.sin((hour - 5) / 13 * Math.PI);
-      const isCloudy = w.clouds.all > 50;
+      const isCloudy = (w.clouds ? (w.clouds ? w.clouds.all : 0) : 0) > 50;
       const base = latAbs < 20 ? 11 : (latAbs < 40 ? 8 : 4);
       uvVal = Math.max(0, Math.round(base * sunElevation * (isCloudy ? 0.4 : 1.0)));
     }
