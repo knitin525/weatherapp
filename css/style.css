@@ -1700,3 +1700,145 @@ input:checked + .switch-slider:before {
     height: 250px;
   }
 }
+
+
+/* Helper utility classes to avoid inline styles */
+.mb-2 {
+  margin-bottom: 2rem;
+}
+.mt-2 {
+  margin-top: 2rem;
+}
+.w-50 {
+  width: 50%;
+}
+.h-280 {
+  height: 280px;
+}
+.h-350 {
+  height: 350px;
+}
+.h-160 {
+  height: 160px;
+}
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+/* Specific class definitions for index.html elements */
+.icon-favorite-tab {
+  color: #ff4757;
+  fill: #ff4757;
+  width: 18px;
+  height: 18px;
+}
+.icon-recent-tab {
+  color: var(--accent-color);
+  width: 18px;
+  height: 18px;
+}
+.skeleton-title-large {
+  width: 40%;
+  height: 3.5rem;
+}
+.skeleton-sun-circle {
+  margin: 1rem auto;
+  width: 100px;
+  height: 100px;
+}
+.hero-fav-btn [data-lucide] {
+  width: 20px;
+  height: 20px;
+}
+.weather-alert-badge {
+  color: var(--danger-color);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.weather-alert-badge [data-lucide] {
+  width: 14px;
+  height: 14px;
+}
+.local-time-val {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.hourly-forecast-row .row-title [data-lucide] {
+  color: var(--accent-color);
+  width: 18px;
+  height: 18px;
+}
+.forecast-column .row-title [data-lucide] {
+  color: var(--accent-color);
+  width: 18px;
+  height: 18px;
+}
+.wind-speed-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
+.wind-dir-val {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.humidity-val {
+  font-size: 2.2rem;
+  min-width: 60px;
+}
+.humidity-droplet-bubble:nth-child(1) {
+  animation-delay: 0s;
+}
+.humidity-droplet-bubble:nth-child(2) {
+  animation-delay: 1.5s;
+  left: 18px;
+}
+.map-row-container .row-title [data-lucide] {
+  color: var(--accent-color);
+  width: 18px;
+  height: 18px;
+}
+.modal-close-btn [data-lucide] {
+  width: 20px;
+  height: 20px;
+}
+.api-note {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+.api-link {
+  color: var(--accent-color);
+}
+.demo-title {
+  font-weight: 600;
+  display: block;
+  font-size: 0.95rem;
+}
+.demo-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.mock-select {
+  background-color: rgba(255,255,255,0.04);
+  border-color: var(--card-border);
+}
+.mock-option {
+  background: #0f172a;
+  color: #ffffff;
+}
+.float-action-btn [data-lucide] {
+  width: 22px;
+  height: 22px;
+}

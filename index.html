@@ -74,7 +74,7 @@
       <!-- Favorite Cities Card -->
       <div class="glass-card">
         <h2 class="sidebar-title">
-          <i data-lucide="heart" style="color: #ff4757; fill: #ff4757; width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
+          <i data-lucide="heart" class="icon-favorite-tab" aria-hidden="true"><!-- icon --></i>
           Favorites
         </h2>
         <ul id="favorites-list" class="sidebar-list">
@@ -85,7 +85,7 @@
       <!-- Recent Searches Card -->
       <div class="glass-card">
         <h2 class="sidebar-title">
-          <i data-lucide="history" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
+          <i data-lucide="history" class="icon-recent-tab" aria-hidden="true"><!-- icon --></i>
           Recent Searches
         </h2>
         <ul id="recents-list" class="sidebar-list">
@@ -98,30 +98,30 @@
     <section class="dashboard-content" aria-label="Weather Dashboard Results">
       
       <!-- Skeleton Container (Visible during loading) -->
-      <div id="dashboard-skeleton" style="display: none;" aria-hidden="true">
-        <div class="weather-hero-row" style="margin-bottom: 2rem;">
-          <div class="glass-card skeleton skeleton-card" style="height: 280px;">
+      <div id="dashboard-skeleton" class="hidden" aria-hidden="true">
+        <div class="weather-hero-row mb-2">
+          <div class="glass-card skeleton skeleton-card h-280">
             <div class="skeleton-text title"></div>
             <div class="skeleton-text subtitle"></div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
-              <div class="skeleton-text" style="width: 40%; height: 3.5rem;"></div>
+            <div class="flex-between mt-2">
+              <div class="skeleton-text skeleton-title-large"></div>
               <div class="skeleton-circle"></div>
             </div>
           </div>
-          <div class="glass-card skeleton skeleton-card" style="height: 280px;">
-            <div class="skeleton-text subtitle" style="width: 50%;"></div>
-            <div class="skeleton-circle" style="margin: 1rem auto; width: 100px; height: 100px;"></div>
+          <div class="glass-card skeleton skeleton-card h-280">
+            <div class="skeleton-text subtitle w-50"></div>
+            <div class="skeleton-circle skeleton-sun-circle"></div>
           </div>
         </div>
         <div class="details-forecast-row">
           <div class="forecast-column">
-            <div class="glass-card skeleton skeleton-card" style="height: 350px;"></div>
+            <div class="glass-card skeleton skeleton-card h-350"></div>
           </div>
           <div class="details-grid">
-            <div class="glass-card skeleton" style="height: 160px;"></div>
-            <div class="glass-card skeleton" style="height: 160px;"></div>
-            <div class="glass-card skeleton" style="height: 160px;"></div>
-            <div class="glass-card skeleton" style="height: 160px;"></div>
+            <div class="glass-card skeleton h-160"></div>
+            <div class="glass-card skeleton h-160"></div>
+            <div class="glass-card skeleton h-160"></div>
+            <div class="glass-card skeleton h-160"></div>
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
       <div id="dashboard-results">
 
         <!-- Error Messages (Fills page when city not found / offline) -->
-        <div id="error-card" class="inline-error-container" style="display: none;">
+        <div id="error-card" class="inline-error-container hidden">
           <div id="error-icon" class="inline-error-icon">
             <i data-lucide="cloud-off" aria-hidden="true"><!-- icon --></i>
           </div>
@@ -142,7 +142,7 @@
         <div id="weather-dashboard-view" class="fade-in">
           
           <!-- Hero Section: Main Weather Details & Sunrise/Sunset Graphic -->
-          <div class="weather-hero-row" style="margin-bottom: 2rem;">
+          <div class="weather-hero-row mb-2">
             
             <!-- Hero weather stats card -->
             <div class="glass-card hero-card">
@@ -152,7 +152,7 @@
                   <p id="current-datetime">Saturday, June 27, 2026</p>
                 </div>
                 <button id="favorite-btn" class="hero-fav-btn" aria-label="Bookmark this city">
-                  <i data-lucide="heart" style="width: 20px; height: 20px;" aria-hidden="true"><!-- icon --></i>
+                  <i data-lucide="heart" aria-hidden="true"><!-- icon --></i>
                 </button>
               </div>
               
@@ -170,10 +170,10 @@
               
               <div class="hero-footer">
                 <div>Feels Like: <span id="feels-like-val" class="feels-like-val">25&deg;C</span></div>
-                <div id="weather-alert-badge" style="display: none; color: var(--danger-color); font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
-                  <i data-lucide="alert-triangle" style="width: 14px; height: 14px;" aria-hidden="true"><!-- icon --></i> Alert Active
+                <div id="weather-alert-badge" class="weather-alert-badge hidden">
+                  <i data-lucide="alert-triangle" aria-hidden="true"><!-- icon --></i> Alert Active
                 </div>
-                <div>Local Time: <span id="local-time-val" style="font-weight: 600; color: var(--text-primary);">12:30 PM</span></div>
+                <div>Local Time: <span id="local-time-val" class="local-time-val">12:30 PM</span></div>
               </div>
             </div>
 
@@ -203,7 +203,7 @@
                     <span id="sunrise-time-val" class="sun-time">05:42 AM</span>
                   </div>
                 </div>
-                <div class="sun-time-block" style="text-align: right;">
+                <div class="sun-time-block text-right">
                   <div>
                     <span class="sun-label">Sunset</span>
                     <span id="sunset-time-val" class="sun-time">09:12 PM</span>
@@ -217,9 +217,9 @@
           </div>
 
           <!-- Hourly 24h Forecast Panel -->
-          <div class="hourly-forecast-row" style="margin-bottom: 2rem;">
+          <div class="hourly-forecast-row mb-2">
             <h2 class="row-title">
-              <i data-lucide="clock" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
+              <i data-lucide="clock" aria-hidden="true"><!-- icon --></i>
               Hourly Forecast
             </h2>
             <div id="hourly-scroll-container" class="hourly-scroll-container">
@@ -228,12 +228,12 @@
           </div>
 
           <!-- Mid Section: 5-Day Forecast & Extra Grid Detail Cards -->
-          <div class="details-forecast-row" style="margin-bottom: 2rem;">
+          <div class="details-forecast-row mb-2">
             
             <!-- 5-Day Forecast Panel -->
             <div class="forecast-column">
               <h2 class="row-title">
-                <i data-lucide="calendar" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
+                <i data-lucide="calendar" aria-hidden="true"><!-- icon --></i>
                 5-Day Forecast
               </h2>
               <div id="forecast-list" class="forecast-list">
@@ -289,7 +289,7 @@
                   </svg>
                   <div id="uv-value" class="uv-needle-val">0</div>
                 </div>
-                <div id="uv-level-txt" class="details-card-footer" style="text-align: center;">Low Exposure</div>
+                <div id="uv-level-txt" class="details-card-footer text-center">Low Exposure</div>
               </div>
 
               <!-- Wind Velocity Compass Widget -->
@@ -307,8 +307,8 @@
                     <div id="compass-needle" class="compass-needle"></div>
                   </div>
                   <div class="wind-text-block">
-                    <div id="wind-speed-val" style="font-size: 1.4rem; font-weight: 800; font-family: var(--font-heading);">12 km/h</div>
-                    <div id="wind-dir-val" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">North-East (45&deg;)</div>
+                    <div id="wind-speed-val" class="wind-speed-val">12 km/h</div>
+                    <div id="wind-dir-val" class="wind-dir-val">North-East (45&deg;)</div>
                   </div>
                 </div>
                 <div id="wind-gust-val" class="details-card-footer">Gusts up to 18 km/h</div>
@@ -321,11 +321,11 @@
                   <i data-lucide="droplet" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div class="humidity-container">
-                  <div id="humidity-value" class="details-card-value" style="font-size: 2.2rem; min-width: 60px;">68%</div>
+                  <div id="humidity-value" class="details-card-value humidity-val">68%</div>
                   <div class="humidity-droplet-bar">
                     <div id="humidity-droplet-fill" class="humidity-droplet-fill">
-                      <div class="humidity-droplet-bubble" style="animation-delay: 0s;"></div>
-                      <div class="humidity-droplet-bubble" style="animation-delay: 1.5s; left: 18px;"></div>
+                      <div class="humidity-droplet-bubble"></div>
+                      <div class="humidity-droplet-bubble"></div>
                     </div>
                   </div>
                 </div>
@@ -363,7 +363,7 @@
           <!-- Bottom Section: Map Container -->
           <div class="map-row-container">
             <h2 class="row-title">
-              <i data-lucide="map" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
+              <i data-lucide="map" aria-hidden="true"><!-- icon --></i>
               Interactive Location Map
             </h2>
             <div class="map-wrapper">
@@ -383,7 +383,7 @@
       <div class="modal-header">
         <h2 id="settings-title" class="modal-title">Application Settings</h2>
         <button id="close-modal-btn" class="modal-close-btn" aria-label="Close modal dialog">
-          <i data-lucide="x" style="width: 20px; height: 20px;" aria-hidden="true"><!-- icon --></i>
+          <i data-lucide="x" aria-hidden="true"><!-- icon --></i>
         </button>
       </div>
       
@@ -393,16 +393,16 @@
         <div class="settings-input-group">
           <label for="api-key-input" class="settings-label">OpenWeatherMap API Key</label>
           <input type="password" id="api-key-input" class="settings-input" placeholder="Paste your API key here...">
-          <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-            Don&apos;t have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">openweathermap.org</a>.
+          <p class="api-note">
+            Don&apos;t have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" class="api-link">openweathermap.org</a>.
           </p>
         </div>
 
         <!-- Mode Select (Live API vs Mock Mode) -->
         <div class="toggle-switch-row">
           <div>
-            <span style="font-weight: 600; display: block; font-size: 0.95rem;">Demo / Mock Mode</span>
-            <span style="font-size: 0.75rem; color: var(--text-secondary);">Load realistic simulated datasets without an API Key</span>
+            <span class="demo-title">Demo / Mock Mode</span>
+            <span class="demo-subtitle">Load realistic simulated datasets without an API Key</span>
           </div>
           <label class="switch" aria-label="Toggle Demo Mode">
             <input type="checkbox" id="demo-mode-checkbox">
@@ -411,15 +411,15 @@
         </div>
 
         <!-- Custom Mock Condition Option -->
-        <div id="mock-condition-group" class="settings-input-group" style="display: none;">
+        <div id="mock-condition-group" class="settings-input-group hidden">
           <label for="mock-condition-select" class="settings-label">Simulated Weather Condition</label>
-          <select id="mock-condition-select" class="settings-input" style="background-color: rgba(255,255,255,0.04); border-color: var(--card-border);">
-            <option value="Clear" style="background: #0f172a; color: #fff;">Clear / Sunny</option>
-            <option value="Rain" style="background: #0f172a; color: #fff;">Rainy</option>
-            <option value="Thunderstorm" style="background: #0f172a; color: #fff;">Thunderstorm</option>
-            <option value="Snow" style="background: #0f172a; color: #fff;">Snowy</option>
-            <option value="Clouds" style="background: #0f172a; color: #fff;">Cloudy</option>
-            <option value="Mist" style="background: #0f172a; color: #fff;">Mist / Fog</option>
+          <select id="mock-condition-select" class="settings-input mock-select">
+            <option value="Clear" class="mock-option">Clear / Sunny</option>
+            <option value="Rain" class="mock-option">Rainy</option>
+            <option value="Thunderstorm" class="mock-option">Thunderstorm</option>
+            <option value="Snow" class="mock-option">Snowy</option>
+            <option value="Clouds" class="mock-option">Cloudy</option>
+            <option value="Mist" class="mock-option">Mist / Fog</option>
           </select>
         </div>
 
@@ -435,10 +435,10 @@
   <!-- Floating Action Buttons -->
   <div class="quick-actions-bar">
     <button id="copy-report-btn" class="float-action-btn" aria-label="Copy Weather Report Summary">
-      <i data-lucide="copy" style="width: 22px; height: 22px;" aria-hidden="true"><!-- icon --></i>
+      <i data-lucide="copy" aria-hidden="true"><!-- icon --></i>
     </button>
     <button id="share-weather-btn" class="float-action-btn" aria-label="Share Weather Details">
-      <i data-lucide="share-2" style="width: 22px; height: 22px;" aria-hidden="true"><!-- icon --></i>
+      <i data-lucide="share-2" aria-hidden="true"><!-- icon --></i>
     </button>
   </div>
 

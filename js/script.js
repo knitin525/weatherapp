@@ -164,7 +164,7 @@ function setupSettingsModalState() {
   }
 
   elements.demoModeCheckbox.checked = state.demoMode;
-  elements.mockConditionGroup.style.display = state.demoMode ? "flex" : "none";
+  elements.mockConditionGroup.classList.toggle("hidden", !state.demoMode);
 }
 
 // --- Map Initialization ---
@@ -320,7 +320,7 @@ function bindEvents() {
   });
 
   elements.demoModeCheckbox.addEventListener("change", (e) => {
-    elements.mockConditionGroup.style.display = e.target.checked ? "flex" : "none";
+    elements.mockConditionGroup.classList.toggle("hidden", !e.target.checked);
   });
 
   elements.saveSettingsBtn.addEventListener("click", () => saveSettings());
@@ -554,17 +554,17 @@ function showLoader(visible) {
 
 function toggleSkeletonLoader(show) {
   if (show) {
-    elements.dashboardSkeleton.style.display = "block";
-    elements.weatherDashboardView.style.display = "none";
+    elements.dashboardSkeleton.classList.remove("hidden");
+    elements.weatherDashboardView.classList.add("hidden");
   } else {
-    elements.dashboardSkeleton.style.display = "none";
-    elements.weatherDashboardView.style.display = "block";
+    elements.dashboardSkeleton.classList.add("hidden");
+    elements.weatherDashboardView.classList.remove("hidden");
   }
 }
 
 function showErrorState(iconName, title, desc) {
-  elements.weatherDashboardView.style.display = "none";
-  elements.errorCard.style.display = "flex";
+  elements.weatherDashboardView.classList.add("hidden");
+  elements.errorCard.classList.remove("hidden");
   elements.errorIcon.innerHTML = `<i data-lucide="${iconName}" style="width: 50px; height: 50px;"></i>`;
   elements.errorTitle.textContent = title;
   elements.errorDesc.textContent = desc;
@@ -573,7 +573,7 @@ function showErrorState(iconName, title, desc) {
 }
 
 function hideErrorState() {
-  elements.errorCard.style.display = "none";
+  elements.errorCard.classList.add("hidden");
 }
 
 // --- Settings Dialog management ---
@@ -727,9 +727,9 @@ function renderWeatherHeroCard() {
   // Alert Status
   // Standard free weather API doesn't support alerts, but we can simulate alert status for extreme elements (wind > 50km/h, temp > 40C, etc.)
   if (w.wind.speed > 13.8 || w.main.temp > 40 || w.main.temp < -10) {
-    elements.weatherAlertBadge.style.display = "flex";
+    elements.weatherAlertBadge.classList.remove("hidden");
   } else {
-    elements.weatherAlertBadge.style.display = "none";
+    elements.weatherAlertBadge.classList.add("hidden");
   }
 }
 
