@@ -180,6 +180,26 @@ header {
   transition: all var(--transition-fast) var(--transition-easing);
 }
 
+.hidden {
+  display: none !important;
+}
+
+.search-wrapper [data-lucide="search"] {
+  color: var(--text-secondary);
+  width: 18px;
+  height: 18px;
+}
+
+#clear-search-btn [data-lucide="x"] {
+  width: 16px;
+  height: 16px;
+}
+
+#search-btn [data-lucide="arrow-right"] {
+  width: 18px;
+  height: 18px;
+}
+
 .search-wrapper:focus-within {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-md);

@@ -280,13 +280,13 @@ function bindEvents() {
   // Clear search field
   elements.searchInput.addEventListener("input", (e) => {
     const query = e.target.value.trim();
-    elements.clearSearchBtn.style.display = query.length > 0 ? "block" : "none";
+    elements.clearSearchBtn.classList.toggle("hidden", query.length === 0);
     handleAutocomplete(query);
   });
 
   elements.clearSearchBtn.addEventListener("click", () => {
     elements.searchInput.value = "";
-    elements.clearSearchBtn.style.display = "none";
+    elements.clearSearchBtn.classList.add("hidden");
     elements.autocompleteDropdown.classList.remove("active");
     elements.searchInput.focus();
   });
