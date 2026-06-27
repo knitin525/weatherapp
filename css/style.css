@@ -341,12 +341,7 @@ body {
   width: 18px;
   height: 18px;
 }
-.unit-toggle {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.85rem;
-  min-width: 40px;
-}
+
 
 /* ── SIDEBAR DRAWER ──────────────────────────────────────── */
 .sidebar-drawer {

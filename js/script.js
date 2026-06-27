@@ -10,7 +10,6 @@ const DEFAULT_API_KEY = "YOUR_API_KEY";
 const state = {
   apiKey: localStorage.getItem("oltag_weathera_api_key") || DEFAULT_API_KEY,
   demoMode: localStorage.getItem("oltag_weathera_demo_mode") === "true" || true, // default to true if key is default
-  unit: localStorage.getItem("oltag_weathera_unit") || "C", // "C" or "F"
   theme: localStorage.getItem("oltag_weathera_theme") || "dark", // "dark" or "light"
   activeCity: localStorage.getItem("oltag_weathera_last_city") || "Paris",
   favorites: JSON.parse(localStorage.getItem("oltag_weathera_favorites")) || ["London", "Tokyo", "New York"],
@@ -42,7 +41,6 @@ const elements = {
   autocompleteDropdown: document.getElementById("autocomplete-dropdown"),
   locationBtn: document.getElementById("location-btn"),
   themeToggle: document.getElementById("theme-toggle"),
-  unitToggle: document.getElementById("unit-toggle"),
   settingsModalBtn: document.getElementById("settings-modal-btn"),
 
   // Dashboard sections
@@ -323,7 +321,6 @@ function bindEvents() {
 
   // Unit and Theme togglers
   elements.themeToggle.addEventListener("click", () => toggleTheme());
-  elements.unitToggle.addEventListener("click", () => toggleUnit());
 
   // Sidebar item list listeners
   elements.favoritesList.addEventListener("click", (e) => handleSidebarClick(e, "favorites"));
@@ -692,28 +689,9 @@ function toggleTheme() {
   showToast(`Switched to ${state.theme} mode.`, "info");
 }
 
-function toggleUnit() {
-  state.unit = state.unit === "C" ? "F" : "C";
-  localStorage.setItem("oltag_weathera_unit", state.unit);
-  elements.unitToggle.textContent = `°${state.unit}`;
 
-  // Re-render weather outputs affected by units
-  renderWeatherHeroCard();
-  renderHourlyForecast();
-  renderFiveDayForecast();
-  renderDetailsGrid();
-  renderWeatherTips();
-  renderMoonPhase();
-  renderWeeklySummary();
-
-  showToast(`Switched units to °${state.unit}.`, "info");
-}
-
-// Temperature conversions helper
+// Temperature conversions helper (Celsius only)
 function formatTemp(tempC) {
-  if (state.unit === "F") {
-    return Math.round((tempC * 9 / 5) + 32);
-  }
   return Math.round(tempC);
 }
 
@@ -758,11 +736,11 @@ function renderWeatherHeroCard() {
 
   // Values
   elements.tempValue.textContent = formatTemp(w.main.temp);
-  elements.tempUnitLabel.textContent = `°${state.unit}`;
+  elements.tempUnitLabel.textContent = `°C`;
   elements.weatherConditionTxt.textContent = w.weather[0].main;
   elements.weatherDescTxt.textContent = w.weather[0].description;
 
-  elements.feelsLikeVal.textContent = `${formatTemp(w.main.feels_like)}°${state.unit}`;
+  elements.feelsLikeVal.textContent = `${formatTemp(w.main.feels_like)}°C`;
 
   // Local Time Calculation
   const localTime = getLocalTime(w.timezone);
@@ -1059,7 +1037,7 @@ function renderDetailsGrid() {
   // Calculate simple dew point approximation: Td = T - ((100 - RH)/5)
   const tempC = w.main.temp;
   const dewPointC = Math.round(tempC - ((100 - w.main.humidity) / 5));
-  elements.dewPointVal.textContent = `Dew point is ${formatTemp(dewPointC)}°${state.unit} right now`;
+  elements.dewPointVal.textContent = `Dew point is ${formatTemp(dewPointC)}°C right now`;
 
   // 5. Atmospheric Pressure
   elements.pressureValue.textContent = `${w.main.pressure} hPa`;
@@ -1086,7 +1064,7 @@ function renderDetailsGrid() {
   const dewPointValCard = document.getElementById("dew-point-card-value");
   const dewPointFooterCard = document.getElementById("dew-point-card-footer");
   if (dewPointValCard && dewPointFooterCard) {
-    dewPointValCard.textContent = `${formatTemp(dewPointC)}°${state.unit}`;
+    dewPointValCard.textContent = `${formatTemp(dewPointC)}°C`;
     if (dewPointC > 20) {
       dewPointFooterCard.textContent = "High humidity — feels muggy and sticky";
     } else if (dewPointC < 10) {
@@ -1339,7 +1317,7 @@ function copyWeatherReport() {
   const windDir = getWindDirectionText(w.wind.deg);
 
   let reportText = `🌤️ OLTag Weathera Weather Report: ${w.name}, ${w.sys.country}\n`;
-  reportText += `• Temperature: ${temp}°${state.unit} (Feels like ${feelsLike}°${state.unit})\n`;
+  reportText += `• Temperature: ${temp}°C (Feels like ${feelsLike}°C)\n`;
   reportText += `• Condition: ${w.weather[0].main} (${w.weather[0].description})\n`;
   reportText += `• Humidity: ${humidity}%\n`;
   reportText += `• Wind: ${speed} km/h ${windDir}\n`;
@@ -1366,7 +1344,7 @@ function shareWeatherDetails() {
     return;
   }
 
-  const reportSummary = `${w.name} Weather: ${formatTemp(w.main.temp)}°${state.unit}, ${w.weather[0].description}.`;
+  const reportSummary = `${w.name} Weather: ${formatTemp(w.main.temp)}°C, ${w.weather[0].description}.`;
 
   if (navigator.share) {
     navigator.share({
@@ -1748,5 +1726,5 @@ function renderWeeklySummary() {
   else if (dominantCondition.toLowerCase() === "thunderstorm") condDesc = "potential thunderstorms and unstable skies";
   else if (dominantCondition.toLowerCase() === "snow") condDesc = "snowfall and freezing conditions";
   
-  summaryTextEl.textContent = `Over the next 5 days, the area will experience ${condDesc}. Temperatures will range from a cool low of ${minTemp}°${state.unit} to a high of ${maxTemp}°${state.unit}. Plan your outdoor events accordingly, and check details on the hourly forecast.`;
+  summaryTextEl.textContent = `Over the next 5 days, the area will experience ${condDesc}. Temperatures will range from a cool low of ${minTemp}°C to a high of ${maxTemp}°C. Plan your outdoor events accordingly, and check details on the hourly forecast.`;
 }
