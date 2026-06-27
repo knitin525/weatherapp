@@ -171,8 +171,8 @@ header {
   display: flex;
   align-items: center;
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
   padding: 0.25rem 0.5rem 0.25rem 1.25rem;
@@ -231,8 +231,8 @@ header {
   left: 0;
   right: 0;
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-lg);
@@ -278,8 +278,8 @@ header {
 
 .action-btn {
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
   border-radius: var(--border-radius-sm);
@@ -332,8 +332,8 @@ main {
 /* Glass Card Global Styles */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
   padding: 1.5rem;
@@ -686,8 +686,8 @@ main {
 .hourly-card {
   flex: 0 0 100px;
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-sm);
   padding: 1rem 0.5rem;
@@ -767,8 +767,8 @@ main {
   gap: 1rem;
   padding: 0.85rem 1.25rem;
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
@@ -1120,8 +1120,8 @@ main {
   right: 0;
   bottom: 0;
   background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   z-index: 10000;
   display: flex;
   flex-direction: column;
@@ -1224,8 +1224,8 @@ main {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -1242,8 +1242,8 @@ main {
 
 .modal-content {
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-lg);
   max-width: 500px;
@@ -1441,8 +1441,8 @@ input:checked + .switch-slider:before {
 .toast {
   pointer-events: auto;
   background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
   border-radius: var(--border-radius-sm);
