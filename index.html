@@ -39,13 +39,13 @@
     <!-- Weather Search -->
     <div class="search-container">
       <div class="search-wrapper">
-        <i data-lucide="search" style="color: var(--text-secondary); width: 18px; height: 18px;"></i>
+        <i data-lucide="search" style="color: var(--text-secondary); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
         <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo)..." aria-label="Search city weather" autocomplete="off">
         <button id="clear-search-btn" class="search-btn" style="display: none;" aria-label="Clear search input">
-          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="x" style="width: 16px; height: 16px;" aria-hidden="true"><!-- icon --></i>
         </button>
         <button id="search-btn" class="search-btn" aria-label="Submit search query">
-          <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="arrow-right" style="width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
         </button>
       </div>
       <!-- Autocomplete Dropdown List -->
@@ -55,16 +55,16 @@
     <!-- Actions Control Panel -->
     <div class="header-actions">
       <button id="location-btn" class="action-btn" aria-label="Use my current location">
-        <i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>
+        <i data-lucide="map-pin" style="width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
       </button>
       <button id="theme-toggle" class="action-btn" aria-label="Toggle Light/Dark Theme">
-        <i data-lucide="moon" class="theme-icon-dark" style="width: 18px; height: 18px;"></i>
+        <i data-lucide="moon" class="theme-icon-dark" style="width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
       </button>
       <button id="unit-toggle" class="action-btn unit-toggle" aria-label="Toggle Temperature Unit">
-        °C
+        &deg;C
       </button>
       <button id="settings-modal-btn" class="action-btn" aria-label="Open Application Settings">
-        <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
+        <i data-lucide="settings" style="width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
       </button>
     </div>
   </header>
@@ -76,7 +76,7 @@
       <!-- Favorite Cities Card -->
       <div class="glass-card">
         <h2 class="sidebar-title">
-          <i data-lucide="heart" style="color: #ff4757; fill: #ff4757; width: 18px; height: 18px;"></i>
+          <i data-lucide="heart" style="color: #ff4757; fill: #ff4757; width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
           Favorites
         </h2>
         <ul id="favorites-list" class="sidebar-list">
@@ -87,7 +87,7 @@
       <!-- Recent Searches Card -->
       <div class="glass-card">
         <h2 class="sidebar-title">
-          <i data-lucide="history" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+          <i data-lucide="history" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
           Recent Searches
         </h2>
         <ul id="recents-list" class="sidebar-list">
@@ -134,7 +134,7 @@
         <!-- Error Messages (Fills page when city not found / offline) -->
         <div id="error-card" class="inline-error-container" style="display: none;">
           <div id="error-icon" class="inline-error-icon">
-            <i data-lucide="cloud-off"></i>
+            <i data-lucide="cloud-off" aria-hidden="true"><!-- icon --></i>
           </div>
           <h2 id="error-title" class="inline-error-title">No Connection Available</h2>
           <p id="error-desc" class="inline-error-msg">Please check your internet connection and try again.</p>
@@ -154,26 +154,26 @@
                   <p id="current-datetime">Saturday, June 27, 2026</p>
                 </div>
                 <button id="favorite-btn" class="hero-fav-btn" aria-label="Bookmark this city">
-                  <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
+                  <i data-lucide="heart" style="width: 20px; height: 20px;" aria-hidden="true"><!-- icon --></i>
                 </button>
               </div>
               
               <div class="hero-body">
                 <div class="temperature-display">
                   <span id="temp-value" class="temp-num">24</span>
-                  <span id="temp-unit-label" class="temp-unit">°C</span>
+                  <span id="temp-unit-label" class="temp-unit">&deg;C</span>
                 </div>
                 <div class="weather-status-wrapper">
-                  <img id="weather-icon-img" src="" alt="Weather Condition Icon" class="hero-weather-icon">
+                  <img id="weather-icon-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Weather Condition Icon" class="hero-weather-icon">
                   <span id="weather-condition-txt" class="weather-condition">Partly Cloudy</span>
                   <span id="weather-desc-txt" class="weather-desc">scattered clouds</span>
                 </div>
               </div>
               
               <div class="hero-footer">
-                <div>Feels Like: <span id="feels-like-val" class="feels-like-val">25°C</span></div>
+                <div>Feels Like: <span id="feels-like-val" class="feels-like-val">25&deg;C</span></div>
                 <div id="weather-alert-badge" style="display: none; color: var(--danger-color); font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
-                  <i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> Alert Active
+                  <i data-lucide="alert-triangle" style="width: 14px; height: 14px;" aria-hidden="true"><!-- icon --></i> Alert Active
                 </div>
                 <div>Local Time: <span id="local-time-val" style="font-weight: 600; color: var(--text-primary);">12:30 PM</span></div>
               </div>
@@ -199,7 +199,7 @@
               
               <div class="sun-times-row">
                 <div class="sun-time-block">
-                  <i data-lucide="sunrise"></i>
+                  <i data-lucide="sunrise" aria-hidden="true"><!-- icon --></i>
                   <div>
                     <span class="sun-label">Sunrise</span>
                     <span id="sunrise-time-val" class="sun-time">05:42 AM</span>
@@ -210,7 +210,7 @@
                     <span class="sun-label">Sunset</span>
                     <span id="sunset-time-val" class="sun-time">09:12 PM</span>
                   </div>
-                  <i data-lucide="sunset"></i>
+                  <i data-lucide="sunset" aria-hidden="true"><!-- icon --></i>
                 </div>
               </div>
               <div id="sun-remaining" class="sun-remaining-txt">8 hours of daylight remaining</div>
@@ -221,7 +221,7 @@
           <!-- Hourly 24h Forecast Panel -->
           <div class="hourly-forecast-row" style="margin-bottom: 2rem;">
             <h2 class="row-title">
-              <i data-lucide="clock" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+              <i data-lucide="clock" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
               Hourly Forecast
             </h2>
             <div id="hourly-scroll-container" class="hourly-scroll-container">
@@ -235,7 +235,7 @@
             <!-- 5-Day Forecast Panel -->
             <div class="forecast-column">
               <h2 class="row-title">
-                <i data-lucide="calendar" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+                <i data-lucide="calendar" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
                 5-Day Forecast
               </h2>
               <div id="forecast-list" class="forecast-list">
@@ -250,7 +250,7 @@
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>AIR QUALITY INDEX</span>
-                  <i data-lucide="wind"></i>
+                  <i data-lucide="wind" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div>
                   <div id="aqi-label-val" class="details-card-value">2 - Fair</div>
@@ -282,7 +282,7 @@
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>UV INDEX</span>
-                  <i data-lucide="sun"></i>
+                  <i data-lucide="sun" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div class="uv-gauge-container">
                   <svg class="uv-svg" viewBox="0 0 100 50">
@@ -298,7 +298,7 @@
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>WIND CONDITIONS</span>
-                  <i data-lucide="compass"></i>
+                  <i data-lucide="compass" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div class="wind-widget-container">
                   <div class="wind-compass">
@@ -310,7 +310,7 @@
                   </div>
                   <div class="wind-text-block">
                     <div id="wind-speed-val" style="font-size: 1.4rem; font-weight: 800; font-family: var(--font-heading);">12 km/h</div>
-                    <div id="wind-dir-val" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">North-East (45°)</div>
+                    <div id="wind-dir-val" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">North-East (45&deg;)</div>
                   </div>
                 </div>
                 <div id="wind-gust-val" class="details-card-footer">Gusts up to 18 km/h</div>
@@ -320,7 +320,7 @@
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>HUMIDITY</span>
-                  <i data-lucide="droplet"></i>
+                  <i data-lucide="droplet" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div class="humidity-container">
                   <div id="humidity-value" class="details-card-value" style="font-size: 2.2rem; min-width: 60px;">68%</div>
@@ -331,14 +331,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="dew-point-val" class="details-card-footer">Dew point is 12°C right now</div>
+                <div id="dew-point-val" class="details-card-footer">Dew point is 12&deg;C right now</div>
               </div>
 
               <!-- Atmospheric Pressure Card -->
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>ATMOSPHERIC PRESSURE</span>
-                  <i data-lucide="gauge"></i>
+                  <i data-lucide="gauge" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div>
                   <div id="pressure-value" class="details-card-value">1013 hPa</div>
@@ -350,7 +350,7 @@
               <div class="glass-card details-card">
                 <div class="details-card-header">
                   <span>VISIBILITY RANGE</span>
-                  <i data-lucide="eye"></i>
+                  <i data-lucide="eye" aria-hidden="true"><!-- icon --></i>
                 </div>
                 <div>
                   <div id="visibility-value" class="details-card-value">10 km</div>
@@ -365,7 +365,7 @@
           <!-- Bottom Section: Map Container -->
           <div class="map-row-container">
             <h2 class="row-title">
-              <i data-lucide="map" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+              <i data-lucide="map" style="color: var(--accent-color); width: 18px; height: 18px;" aria-hidden="true"><!-- icon --></i>
               Interactive Location Map
             </h2>
             <div class="map-wrapper">
@@ -385,7 +385,7 @@
       <div class="modal-header">
         <h2 id="settings-title" class="modal-title">Application Settings</h2>
         <button id="close-modal-btn" class="modal-close-btn" aria-label="Close modal dialog">
-          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+          <i data-lucide="x" style="width: 20px; height: 20px;" aria-hidden="true"><!-- icon --></i>
         </button>
       </div>
       
@@ -396,7 +396,7 @@
           <label for="api-key-input" class="settings-label">OpenWeatherMap API Key</label>
           <input type="password" id="api-key-input" class="settings-input" placeholder="Paste your API key here...">
           <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
-            Don't have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">openweathermap.org</a>.
+            Don&apos;t have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">openweathermap.org</a>.
           </p>
         </div>
 
@@ -437,10 +437,10 @@
   <!-- Floating Action Buttons -->
   <div class="quick-actions-bar">
     <button id="copy-report-btn" class="float-action-btn" aria-label="Copy Weather Report Summary">
-      <i data-lucide="copy" style="width: 22px; height: 22px;"></i>
+      <i data-lucide="copy" style="width: 22px; height: 22px;" aria-hidden="true"><!-- icon --></i>
     </button>
     <button id="share-weather-btn" class="float-action-btn" aria-label="Share Weather Details">
-      <i data-lucide="share-2" style="width: 22px; height: 22px;"></i>
+      <i data-lucide="share-2" style="width: 22px; height: 22px;" aria-hidden="true"><!-- icon --></i>
     </button>
   </div>
 
