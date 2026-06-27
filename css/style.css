@@ -34,10 +34,11 @@
   --border-radius-md: 20px;
   --border-radius-lg: 30px;
   
-  /* Transition durations */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.4s ease;
-  --transition-slow: 0.8s ease;
+  /* Transition durations & easing */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.4s;
+  --transition-slow: 0.8s;
+  --transition-easing: ease;
 }
 
 /* --- Light Mode Variable Overrides --- */
@@ -97,7 +98,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  transition: background var(--transition-slow), color var(--transition-fast);
+  transition: background var(--transition-slow) var(--transition-easing), color var(--transition-fast) var(--transition-easing);
 }
 
 /* Custom Scrollbar */
@@ -176,7 +177,7 @@ header {
   border-radius: var(--border-radius-md);
   padding: 0.25rem 0.5rem 0.25rem 1.25rem;
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .search-wrapper:focus-within {
@@ -211,7 +212,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .search-btn:hover, .location-btn:hover {
@@ -241,7 +242,7 @@ header {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .autocomplete-dropdown.active {
@@ -256,7 +257,7 @@ header {
   gap: 0.75rem;
   padding: 0.75rem 1.25rem;
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast) var(--transition-easing);
   color: var(--text-primary);
 }
 
@@ -287,7 +288,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
   box-shadow: var(--shadow-sm);
 }
 
@@ -337,7 +338,7 @@ main {
   border-radius: var(--border-radius-md);
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal) var(--transition-easing);
   position: relative;
   overflow: hidden;
 }
@@ -378,7 +379,7 @@ main {
   border: 1px solid transparent;
   border-radius: var(--border-radius-sm);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .sidebar-item:hover {
@@ -413,7 +414,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .delete-item-btn:hover {
@@ -481,7 +482,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .hero-fav-btn.favorited {
@@ -605,11 +606,11 @@ main {
   stroke: var(--warning-color);
   stroke-width: 3;
   stroke-dasharray: 0;
-  transition: stroke-dasharray var(--transition-slow);
+  transition: stroke-dasharray var(--transition-slow) var(--transition-easing);
 }
 
 .sun-element {
-  transition: transform var(--transition-slow);
+  transition: transform var(--transition-slow) var(--transition-easing);
 }
 
 .sun-element-glow {
@@ -696,7 +697,7 @@ main {
   gap: 0.5rem;
   text-align: center;
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
   cursor: pointer;
 }
 
@@ -736,7 +737,7 @@ main {
 .hourly-wind-arrow {
   display: inline-block;
   font-size: 0.7rem;
-  transition: transform var(--transition-normal);
+  transition: transform var(--transition-normal) var(--transition-easing);
 }
 
 /* --- Details Card Grid & 5-Day Forecast Main Row --- */
@@ -771,7 +772,7 @@ main {
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal) var(--transition-easing);
 }
 
 .forecast-item:hover {
@@ -894,7 +895,7 @@ main {
   border-radius: 3px;
   background: var(--success-color);
   width: 0%;
-  transition: width 1s ease, background 1s ease;
+  transition: width 1s var(--transition-easing), background 1s var(--transition-easing);
 }
 
 .aqi-breakdown {
@@ -939,7 +940,7 @@ main {
   stroke-linecap: round;
   stroke-dasharray: 126; /* Arc length (PI * r) */
   stroke-dashoffset: 126;
-  transition: stroke-dashoffset 1s ease, stroke 1s ease;
+  transition: stroke-dashoffset 1s var(--transition-easing), stroke 1s var(--transition-easing);
 }
 
 .uv-needle-val {
@@ -1098,7 +1099,7 @@ main {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-lg), 0 0 15px var(--accent-glow);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .float-action-btn:hover {
@@ -1128,7 +1129,7 @@ main {
   gap: 1.5rem;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .page-loader.active {
@@ -1230,7 +1231,7 @@ main {
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .modal-overlay.active {
@@ -1249,7 +1250,7 @@ main {
   padding: 2rem;
   box-shadow: var(--shadow-lg);
   transform: translateY(-20px);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal) var(--transition-easing);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -1281,7 +1282,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast) var(--transition-easing);
 }
 
 .modal-close-btn:hover {
@@ -1316,7 +1317,7 @@ main {
   font-family: var(--font-body);
   font-size: 0.95rem;
   outline: none;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast) var(--transition-easing);
 }
 
 .settings-input:focus {
@@ -1397,7 +1398,7 @@ input:checked + .switch-slider:before {
   font-size: 0.95rem;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .btn-secondary {
@@ -1451,7 +1452,7 @@ input:checked + .switch-slider:before {
   gap: 0.75rem;
   opacity: 0;
   transform: translateY(-20px) scale(0.9);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast) var(--transition-easing);
 }
 
 .toast.show {
