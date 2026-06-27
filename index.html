@@ -3,400 +3,501 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A premium, highly interactive glassmorphism Weather Web Application featuring dynamic weather backgrounds, a 5-day forecast, air quality indices, interactive maps, and real-time alerts.">
-  <title>OLTag Weathera - Premium Weather Web App</title>
-  <link rel="icon" type="image/png" href="css/Img/Oltag_logo_Weather_Favicon.png">
-  
-  <!-- Preload fonts for optimized rendering -->
+  <meta name="description" content="OLTag Weathera — Premium weather dashboard with live radar, 5-day forecasts, air quality, UV index, moon phases, and interactive weather maps powered by OpenWeatherMap.">
+  <title>OLTag Weathera — Premium Weather Dashboard</title>
+  <link rel="icon" type="image/png" href="Img/Oltag_logo_Weather_Favicon.png">
+
+  <!-- Preload fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
-  <!-- Leaflet CSS for Weather Map -->
+
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  
-  <!-- Custom Stylesheet -->
+
+  <!-- App Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <!-- Page Loader Overlay -->
   <div id="page-loader" class="page-loader" aria-hidden="true">
-    <div class="spinner"></div>
+    <div class="loader-ring">
+      <div class="spinner"></div>
+    </div>
     <div class="loader-text">Loading Weather Patterns...</div>
   </div>
 
   <!-- Toast Notification Center -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-  <!-- App Header -->
-  <header>
-    <a href="#" class="brand" aria-label="OLTag Weathera Home">
-      <img class="brand-logo" src="css/Img/Oltag_logo_Weather.png" alt="OLTag Weathera Logo">
-    </a>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- STICKY HEADER                                          -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="#" class="brand" aria-label="OLTag Weathera Home">
+        <img class="brand-logo" src="Img/Oltag_logo_Weather.png" alt="OLTag Weathera Logo">
+        <span class="brand-name">Weathera</span>
+      </a>
 
-    <!-- Weather Search -->
-    <div class="search-container">
-      <div class="search-wrapper">
-        <i data-lucide="search" aria-hidden="true"><!-- icon --></i>
-        <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo)..." aria-label="Search city weather" autocomplete="off">
-        <button id="clear-search-btn" class="search-btn hidden" aria-label="Clear search input">
-          <i data-lucide="x" aria-hidden="true"><!-- icon --></i>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-wrapper">
+          <i data-lucide="search" aria-hidden="true"><!-- icon --></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Search any city..." aria-label="Search city weather" autocomplete="off">
+          <button id="clear-search-btn" class="search-btn hidden" aria-label="Clear search input">
+            <i data-lucide="x" aria-hidden="true"><!-- icon --></i>
+          </button>
+          <button id="search-btn" class="search-btn" aria-label="Submit search query">
+            <i data-lucide="arrow-right" aria-hidden="true"><!-- icon --></i>
+          </button>
+        </div>
+        <div id="autocomplete-dropdown" class="autocomplete-dropdown" role="listbox" aria-label="City suggestions"></div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="location-btn" class="action-btn" aria-label="Use my current location" title="My Location">
+          <i data-lucide="navigation" aria-hidden="true"><!-- icon --></i>
         </button>
-        <button id="search-btn" class="search-btn" aria-label="Submit search query">
-          <i data-lucide="arrow-right" aria-hidden="true"><!-- icon --></i>
+        <button id="sidebar-toggle-btn" class="action-btn" aria-label="Toggle saved places" title="My Places">
+          <i data-lucide="bookmark" aria-hidden="true"><!-- icon --></i>
+        </button>
+        <button id="unit-toggle" class="action-btn unit-toggle" aria-label="Toggle Temperature Unit" title="Toggle °C / °F">
+          &deg;C
+        </button>
+        <button id="theme-toggle" class="action-btn" aria-label="Toggle Light/Dark Theme" title="Toggle Theme">
+          <i data-lucide="moon" class="theme-icon-dark" aria-hidden="true"><!-- icon --></i>
+        </button>
+        <button id="settings-modal-btn" class="action-btn" aria-label="Open Application Settings" title="Settings">
+          <i data-lucide="settings" aria-hidden="true"><!-- icon --></i>
         </button>
       </div>
-      <!-- Autocomplete Dropdown List -->
-      <div id="autocomplete-dropdown" class="autocomplete-dropdown" role="listbox" aria-label="City suggestions"></div>
-    </div>
-
-    <!-- Actions Control Panel -->
-    <div class="header-actions">
-      <button id="location-btn" class="action-btn" aria-label="Use my current location">
-        <i data-lucide="map-pin" aria-hidden="true"><!-- icon --></i>
-      </button>
-      <button id="theme-toggle" class="action-btn" aria-label="Toggle Light/Dark Theme">
-        <i data-lucide="moon" class="theme-icon-dark" aria-hidden="true"><!-- icon --></i>
-      </button>
-      <button id="unit-toggle" class="action-btn unit-toggle" aria-label="Toggle Temperature Unit">
-        &deg;C
-      </button>
-      <button id="settings-modal-btn" class="action-btn" aria-label="Open Application Settings">
-        <i data-lucide="settings" aria-hidden="true"><!-- icon --></i>
-      </button>
     </div>
   </header>
 
-  <!-- Dashboard Main Layout -->
-  <main>
-    <!-- Left Sidebar (Favorites & Recents) -->
-    <section class="sidebar" aria-label="Saved Cities and History">
-      <!-- Favorite Cities Card -->
-      <div class="glass-card">
-        <h2 class="sidebar-title">
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SIDEBAR DRAWER (Favorites & Recents)                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <aside class="sidebar-drawer" id="sidebar-drawer" aria-label="Saved Cities and History">
+    <div class="drawer-header">
+      <h2 class="drawer-title">
+        <i data-lucide="map-pin" aria-hidden="true"><!-- icon --></i>
+        My Places
+      </h2>
+      <button id="drawer-close-btn" class="drawer-close-btn" aria-label="Close sidebar">
+        <i data-lucide="x" aria-hidden="true"><!-- icon --></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="glass-card drawer-card">
+        <h3 class="sidebar-title">
           <i data-lucide="heart" class="icon-favorite-tab" aria-hidden="true"><!-- icon --></i>
           Favorites
-        </h2>
+        </h3>
         <ul id="favorites-list" class="sidebar-list">
           <!-- Populated by JavaScript -->
         </ul>
       </div>
-
-      <!-- Recent Searches Card -->
-      <div class="glass-card">
-        <h2 class="sidebar-title">
+      <div class="glass-card drawer-card">
+        <h3 class="sidebar-title">
           <i data-lucide="history" class="icon-recent-tab" aria-hidden="true"><!-- icon --></i>
           Recent Searches
-        </h2>
+        </h3>
         <ul id="recents-list" class="sidebar-list">
           <!-- Populated by JavaScript -->
         </ul>
       </div>
-    </section>
+    </div>
+  </aside>
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
 
-    <!-- Dashboard Content Pane -->
-    <section class="dashboard-content" aria-label="Weather Dashboard Results">
-      
-      <!-- Skeleton Container (Visible during loading) -->
-      <div id="dashboard-skeleton" class="hidden" aria-hidden="true">
-        <div class="weather-hero-row mb-2">
-          <div class="glass-card skeleton skeleton-card h-280">
-            <div class="skeleton-text title"></div>
-            <div class="skeleton-text subtitle"></div>
-            <div class="flex-between mt-2">
-              <div class="skeleton-text skeleton-title-large"></div>
-              <div class="skeleton-circle"></div>
-            </div>
-          </div>
-          <div class="glass-card skeleton skeleton-card h-280">
-            <div class="skeleton-text subtitle w-50"></div>
-            <div class="skeleton-circle skeleton-sun-circle"></div>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MAIN DASHBOARD                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <main class="dashboard">
+
+    <!-- Skeleton Loader (visible during loading) -->
+    <div id="dashboard-skeleton" class="skeleton-container hidden" aria-hidden="true">
+      <div class="weather-hero-row">
+        <div class="glass-card skeleton skeleton-card h-280">
+          <div class="skeleton-text title"></div>
+          <div class="skeleton-text subtitle"></div>
+          <div class="flex-between mt-2">
+            <div class="skeleton-text skeleton-title-large"></div>
+            <div class="skeleton-circle"></div>
           </div>
         </div>
-        <div class="details-forecast-row">
-          <div class="forecast-column">
-            <div class="glass-card skeleton skeleton-card h-350"></div>
-          </div>
-          <div class="details-grid">
-            <div class="glass-card skeleton h-160"></div>
-            <div class="glass-card skeleton h-160"></div>
-            <div class="glass-card skeleton h-160"></div>
-            <div class="glass-card skeleton h-160"></div>
-          </div>
+        <div class="glass-card skeleton skeleton-card h-280">
+          <div class="skeleton-text subtitle w-50"></div>
+          <div class="skeleton-circle skeleton-sun-circle"></div>
         </div>
       </div>
+      <div class="highlights-grid" style="margin-top:2rem;">
+        <div class="glass-card skeleton h-160"></div>
+        <div class="glass-card skeleton h-160"></div>
+        <div class="glass-card skeleton h-160"></div>
+        <div class="glass-card skeleton h-160"></div>
+      </div>
+    </div>
 
-      <!-- Live Dashboard Output (Fades in when loaded) -->
-      <div id="dashboard-results">
+    <!-- Live Dashboard Output -->
+    <div id="dashboard-results">
 
-        <!-- Error Messages (Fills page when city not found / offline) -->
-        <div id="error-card" class="inline-error-container hidden">
-          <div id="error-icon" class="inline-error-icon">
-            <i data-lucide="cloud-off" aria-hidden="true"><!-- icon --></i>
-          </div>
-          <h2 id="error-title" class="inline-error-title">No Connection Available</h2>
-          <p id="error-desc" class="inline-error-msg">Please check your internet connection and try again.</p>
+      <!-- Error State -->
+      <div id="error-card" class="inline-error-container hidden">
+        <div id="error-icon" class="inline-error-icon">
+          <i data-lucide="cloud-off" aria-hidden="true"><!-- icon --></i>
         </div>
+        <h2 id="error-title" class="inline-error-title">No Connection Available</h2>
+        <p id="error-desc" class="inline-error-msg">Please check your internet connection and try again.</p>
+      </div>
 
-        <!-- Weather Display Layout Grid -->
-        <div id="weather-dashboard-view" class="fade-in">
-          
-          <!-- Hero Section: Main Weather Details & Sunrise/Sunset Graphic -->
-          <div class="weather-hero-row mb-2">
-            
-            <!-- Hero weather stats card -->
-            <div class="glass-card hero-card">
-              <div class="hero-header">
-                <div class="location-info">
-                  <h1 id="city-name">Paris</h1>
-                  <p id="current-datetime">Saturday, June 27, 2026</p>
-                </div>
-                <button id="favorite-btn" class="hero-fav-btn" aria-label="Bookmark this city">
-                  <i data-lucide="heart" aria-hidden="true"><!-- icon --></i>
-                </button>
+      <!-- Weather Dashboard View -->
+      <div id="weather-dashboard-view" class="fade-in">
+
+        <!-- ── HERO SECTION ─────────────────────────────── -->
+        <section class="hero-section section-animate">
+          <!-- Main Weather Card -->
+          <div class="glass-card hero-card">
+            <div class="hero-header">
+              <div class="location-info">
+                <h1 id="city-name">Paris</h1>
+                <p id="current-datetime">Saturday, June 27, 2026</p>
               </div>
-              
-              <div class="hero-body">
-                <div class="temperature-display">
-                  <span id="temp-value" class="temp-num">24</span>
-                  <span id="temp-unit-label" class="temp-unit">&deg;C</span>
-                </div>
-                <div class="weather-status-wrapper">
-                  <img id="weather-icon-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Weather Condition Icon" class="hero-weather-icon">
-                  <span id="weather-condition-txt" class="weather-condition">Partly Cloudy</span>
-                  <span id="weather-desc-txt" class="weather-desc">scattered clouds</span>
+              <button id="favorite-btn" class="hero-fav-btn" aria-label="Bookmark this city">
+                <i data-lucide="heart" aria-hidden="true"><!-- icon --></i>
+              </button>
+            </div>
+            <div class="hero-body">
+              <div class="temperature-display">
+                <span id="temp-value" class="temp-num">24</span>
+                <span id="temp-unit-label" class="temp-unit">&deg;C</span>
+              </div>
+              <div class="weather-status-wrapper">
+                <img id="weather-icon-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Weather Condition Icon" class="hero-weather-icon">
+                <span id="weather-condition-txt" class="weather-condition">Partly Cloudy</span>
+                <span id="weather-desc-txt" class="weather-desc">scattered clouds</span>
+              </div>
+            </div>
+            <div class="hero-footer">
+              <div class="hero-pill">
+                <i data-lucide="thermometer" aria-hidden="true"><!-- icon --></i>
+                <span>Feels Like: <strong id="feels-like-val" class="feels-like-val">25&deg;C</strong></span>
+              </div>
+              <div id="weather-alert-badge" class="weather-alert-badge hidden">
+                <i data-lucide="alert-triangle" aria-hidden="true"><!-- icon --></i> Alert Active
+              </div>
+              <div class="hero-pill">
+                <i data-lucide="clock" aria-hidden="true"><!-- icon --></i>
+                <span>Local Time: <strong id="local-time-val" class="local-time-val">12:30 PM</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sunrise & Sunset Tracker -->
+          <div class="glass-card sun-track-card">
+            <h3 class="sun-card-title">
+              <i data-lucide="sunrise" aria-hidden="true"><!-- icon --></i>
+              Sunrise &amp; Sunset
+            </h3>
+            <div class="sun-track-container">
+              <svg class="sun-track-svg" viewBox="0 0 240 100" preserveAspectRatio="none">
+                <path id="sun-path-bg" class="sun-path-bg" d="M 10 90 A 110 80 0 0 1 230 90" />
+                <path id="sun-path-active" class="sun-path-active" d="M 10 90 A 110 80 0 0 1 230 90" stroke-dasharray="350 350" />
+                <g id="sun-pointer" class="sun-element" transform="translate(10, 90)">
+                  <circle cx="0" cy="0" r="10" class="sun-element-glow" />
+                  <circle cx="0" cy="0" r="6" class="sun-element-core" />
+                </g>
+              </svg>
+            </div>
+            <div class="sun-times-row">
+              <div class="sun-time-block">
+                <i data-lucide="sunrise" aria-hidden="true"><!-- icon --></i>
+                <div>
+                  <span class="sun-label">Sunrise</span>
+                  <span id="sunrise-time-val" class="sun-time">05:42 AM</span>
                 </div>
               </div>
-              
-              <div class="hero-footer">
-                <div>Feels Like: <span id="feels-like-val" class="feels-like-val">25&deg;C</span></div>
-                <div id="weather-alert-badge" class="weather-alert-badge hidden">
-                  <i data-lucide="alert-triangle" aria-hidden="true"><!-- icon --></i> Alert Active
+              <div class="sun-time-block text-right">
+                <div>
+                  <span class="sun-label">Sunset</span>
+                  <span id="sunset-time-val" class="sun-time">09:12 PM</span>
                 </div>
-                <div>Local Time: <span id="local-time-val" class="local-time-val">12:30 PM</span></div>
+                <i data-lucide="sunset" aria-hidden="true"><!-- icon --></i>
+              </div>
+            </div>
+            <div id="sun-remaining" class="sun-remaining-txt">8 hours of daylight remaining</div>
+          </div>
+        </section>
+
+        <!-- ── TODAY'S HIGHLIGHTS ────────────────────────── -->
+        <section class="highlights-section section-animate">
+          <h2 class="section-title">
+            <i data-lucide="activity" aria-hidden="true"><!-- icon --></i>
+            Today's Highlights
+          </h2>
+          <div class="highlights-grid">
+
+            <!-- Air Quality Index -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>AIR QUALITY INDEX</span>
+                <div class="card-icon-badge aqi-badge"><i data-lucide="wind" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div>
+                <div id="aqi-label-val" class="details-card-value">2 - Fair</div>
+                <div class="aqi-bar-container"><div id="aqi-bar-fill" class="aqi-bar-fill"></div></div>
+              </div>
+              <div class="aqi-breakdown">
+                <div><span>PM2.5</span><span id="aqi-pm25" class="aqi-comp-val">12</span></div>
+                <div><span>PM10</span><span id="aqi-pm10" class="aqi-comp-val">20</span></div>
+                <div><span>CO</span><span id="aqi-co" class="aqi-comp-val">280</span></div>
+                <div><span>NO&#x2082;</span><span id="aqi-no2" class="aqi-comp-val">15</span></div>
               </div>
             </div>
 
-            <!-- Sunrise & Sunset Tracker Card -->
-            <div class="glass-card sun-track-card">
-              <h3 class="sun-card-title">Sunrise & Sunset</h3>
-              <div class="sun-track-container">
-                <svg class="sun-track-svg" viewBox="0 0 240 100" preserveAspectRatio="none">
-                  <!-- Dashed curve track representing the sun's trajectory -->
-                  <path id="sun-path-bg" class="sun-path-bg" d="M 10 90 A 110 80 0 0 1 230 90" />
-                  <!-- Colored fill path matching progress of the day -->
-                  <path id="sun-path-active" class="sun-path-active" d="M 10 90 A 110 80 0 0 1 230 90" stroke-dasharray="350 350" />
-                  
-                  <!-- Glowing SVG Sun Pointer -->
-                  <g id="sun-pointer" class="sun-element" transform="translate(10, 90)">
-                    <circle cx="0" cy="0" r="10" class="sun-element-glow" />
-                    <circle cx="0" cy="0" r="6" class="sun-element-core" />
-                  </g>
+            <!-- UV Index -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>UV INDEX</span>
+                <div class="card-icon-badge uv-badge"><i data-lucide="sun" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div class="uv-gauge-container">
+                <svg class="uv-svg" viewBox="0 0 100 50">
+                  <path class="uv-track" d="M 10 50 A 40 40 0 0 1 90 50" />
+                  <path id="uv-gauge-fill" class="uv-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                </svg>
+                <div id="uv-value" class="uv-needle-val">0</div>
+              </div>
+              <div id="uv-level-txt" class="details-card-footer text-center">Low Exposure</div>
+            </div>
+
+            <!-- Wind -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>WIND CONDITIONS</span>
+                <div class="card-icon-badge wind-badge"><i data-lucide="compass" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div class="wind-widget-container">
+                <div class="wind-compass">
+                  <span class="compass-direction direction-n">N</span>
+                  <span class="compass-direction direction-e">E</span>
+                  <span class="compass-direction direction-s">S</span>
+                  <span class="compass-direction direction-w">W</span>
+                  <div id="compass-needle" class="compass-needle"></div>
+                </div>
+                <div class="wind-text-block">
+                  <div id="wind-speed-val" class="wind-speed-val">12 km/h</div>
+                  <div id="wind-dir-val" class="wind-dir-val">North-East (45&deg;)</div>
+                </div>
+              </div>
+              <div id="wind-gust-val" class="details-card-footer">Gusts up to 18 km/h</div>
+            </div>
+
+            <!-- Humidity -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>HUMIDITY</span>
+                <div class="card-icon-badge humidity-badge"><i data-lucide="droplet" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div class="humidity-container">
+                <div id="humidity-value" class="details-card-value humidity-val">68%</div>
+                <div class="humidity-droplet-bar">
+                  <div id="humidity-droplet-fill" class="humidity-droplet-fill">
+                    <div class="humidity-droplet-bubble"></div>
+                    <div class="humidity-droplet-bubble"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="dew-point-val" class="details-card-footer">Dew point is 12&deg;C right now</div>
+            </div>
+
+            <!-- Pressure -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>PRESSURE</span>
+                <div class="card-icon-badge pressure-badge"><i data-lucide="gauge" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div>
+                <div id="pressure-value" class="details-card-value">1013 hPa</div>
+              </div>
+              <div id="pressure-footer" class="details-card-footer">Normal sea-level pressure</div>
+            </div>
+
+            <!-- Visibility -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>VISIBILITY</span>
+                <div class="card-icon-badge visibility-badge"><i data-lucide="eye" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div>
+                <div id="visibility-value" class="details-card-value">10 km</div>
+              </div>
+              <div id="visibility-footer" class="details-card-footer">Perfectly clear view</div>
+            </div>
+
+            <!-- Dew Point (NEW) -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>DEW POINT</span>
+                <div class="card-icon-badge dewpoint-badge"><i data-lucide="droplets" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div>
+                <div id="dew-point-card-value" class="details-card-value">12&deg;C</div>
+              </div>
+              <div id="dew-point-card-footer" class="details-card-footer">Comfortable moisture level</div>
+            </div>
+
+            <!-- Cloud Cover (NEW) -->
+            <div class="glass-card details-card">
+              <div class="details-card-header">
+                <span>CLOUD COVER</span>
+                <div class="card-icon-badge cloud-badge"><i data-lucide="cloud" aria-hidden="true"><!-- icon --></i></div>
+              </div>
+              <div>
+                <div id="cloud-cover-value" class="details-card-value">45%</div>
+              </div>
+              <div id="cloud-cover-footer" class="details-card-footer">Partly cloudy skies</div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ── WEATHER RADAR ────────────────────────────── -->
+        <section class="radar-section section-animate">
+          <div class="radar-header">
+            <h2 class="section-title">
+              <i data-lucide="radio" aria-hidden="true"><!-- icon --></i>
+              WeatherRadar
+            </h2>
+            <div class="radar-controls">
+              <button class="radar-tab-btn active" data-layer="precipitation_new" aria-label="Toggle precipitation radar">
+                <i data-lucide="droplets" aria-hidden="true"><!-- icon --></i> Rain
+              </button>
+              <button class="radar-tab-btn" data-layer="clouds_new" aria-label="Toggle cloud cover radar">
+                <i data-lucide="cloud" aria-hidden="true"><!-- icon --></i> Clouds
+              </button>
+              <button class="radar-tab-btn" data-layer="temp_new" aria-label="Toggle temperature radar">
+                <i data-lucide="thermometer" aria-hidden="true"><!-- icon --></i> Temp
+              </button>
+              <button class="radar-tab-btn" data-layer="wind_new" aria-label="Toggle wind speed radar">
+                <i data-lucide="wind" aria-hidden="true"><!-- icon --></i> Wind
+              </button>
+            </div>
+          </div>
+          <div class="map-wrapper">
+            <div id="weather-map"></div>
+          </div>
+        </section>
+
+        <!-- ── HOURLY FORECAST ──────────────────────────── -->
+        <section class="hourly-section section-animate">
+          <h2 class="section-title">
+            <i data-lucide="clock" aria-hidden="true"><!-- icon --></i>
+            Hourly Forecast
+          </h2>
+          <div id="hourly-scroll-container" class="hourly-scroll-container">
+            <!-- Populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- ── 5-DAY FORECAST ───────────────────────────── -->
+        <section class="forecast-section section-animate">
+          <h2 class="section-title">
+            <i data-lucide="calendar" aria-hidden="true"><!-- icon --></i>
+            5-Day Forecast
+          </h2>
+          <div id="forecast-list" class="forecast-list">
+            <!-- Populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- ── WEATHER TIPS ─────────────────────────────── -->
+        <section class="tips-section section-animate">
+          <h2 class="section-title">
+            <i data-lucide="lightbulb" aria-hidden="true"><!-- icon --></i>
+            Weather Tips
+          </h2>
+          <div id="weather-tips-grid" class="tips-grid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- ── MOON PHASE & WEEKLY SUMMARY ──────────────── -->
+        <section class="extras-section section-animate">
+          <div class="glass-card extras-card" id="moon-phase-card">
+            <h3 class="extras-card-title">
+              <i data-lucide="moon" aria-hidden="true"><!-- icon --></i>
+              Moon Phase
+            </h3>
+            <div class="moon-display">
+              <div class="moon-visual" id="moon-visual">
+                <svg viewBox="0 0 100 100" class="moon-svg">
+                  <circle cx="50" cy="50" r="45" class="moon-bg" />
+                  <path id="moon-shadow-path" d="" class="moon-shadow" />
                 </svg>
               </div>
-              
-              <div class="sun-times-row">
-                <div class="sun-time-block">
-                  <i data-lucide="sunrise" aria-hidden="true"><!-- icon --></i>
-                  <div>
-                    <span class="sun-label">Sunrise</span>
-                    <span id="sunrise-time-val" class="sun-time">05:42 AM</span>
-                  </div>
-                </div>
-                <div class="sun-time-block text-right">
-                  <div>
-                    <span class="sun-label">Sunset</span>
-                    <span id="sunset-time-val" class="sun-time">09:12 PM</span>
-                  </div>
-                  <i data-lucide="sunset" aria-hidden="true"><!-- icon --></i>
-                </div>
+              <div class="moon-info">
+                <div id="moon-phase-name" class="moon-phase-name">Waxing Gibbous</div>
+                <div id="moon-illumination" class="moon-illumination">78% illuminated</div>
               </div>
-              <div id="sun-remaining" class="sun-remaining-txt">8 hours of daylight remaining</div>
-            </div>
-
-          </div>
-
-          <!-- WeatherRadar Live Map Container (Re-positioned for Weather & Radar Redesign) -->
-          <div class="map-row-container mb-2">
-            <div class="radar-header">
-              <h2 class="row-title">
-                <i data-lucide="map" aria-hidden="true"><!-- icon --></i>
-                WeatherRadar
-              </h2>
-              <div class="radar-controls">
-                <button class="radar-tab-btn active" data-layer="precipitation_new" aria-label="Toggle precipitation radar">
-                  <i data-lucide="droplets" aria-hidden="true"><!-- icon --></i> Rain
-                </button>
-                <button class="radar-tab-btn" data-layer="clouds_new" aria-label="Toggle cloud cover radar">
-                  <i data-lucide="cloud" aria-hidden="true"><!-- icon --></i> Clouds
-                </button>
-                <button class="radar-tab-btn" data-layer="temp_new" aria-label="Toggle temperature radar">
-                  <i data-lucide="thermometer" aria-hidden="true"><!-- icon --></i> Temperature
-                </button>
-                <button class="radar-tab-btn" data-layer="wind_new" aria-label="Toggle wind speed radar">
-                  <i data-lucide="wind" aria-hidden="true"><!-- icon --></i> Wind
-                </button>
-              </div>
-            </div>
-            <div class="map-wrapper">
-              <div id="weather-map"></div>
             </div>
           </div>
 
-          <!-- Hourly 24h Forecast Panel -->
-          <div class="hourly-forecast-row mb-2">
-            <h2 class="row-title">
-              <i data-lucide="clock" aria-hidden="true"><!-- icon --></i>
-              Hourly Forecast
-            </h2>
-            <div id="hourly-scroll-container" class="hourly-scroll-container">
-              <!-- Populated by JavaScript -->
-            </div>
+          <div class="glass-card extras-card" id="weekly-summary-card">
+            <h3 class="extras-card-title">
+              <i data-lucide="file-text" aria-hidden="true"><!-- icon --></i>
+              Weekly Summary
+            </h3>
+            <p id="weekly-summary-text" class="weekly-summary-text">
+              Loading weekly forecast summary...
+            </p>
           </div>
-
-          <!-- Mid Section: 5-Day Forecast & Extra Grid Detail Cards -->
-          <div class="details-forecast-row mb-2">
-            
-            <!-- 5-Day Forecast Panel -->
-            <div class="forecast-column">
-              <h2 class="row-title">
-                <i data-lucide="calendar" aria-hidden="true"><!-- icon --></i>
-                5-Day Forecast
-              </h2>
-              <div id="forecast-list" class="forecast-list">
-                <!-- Populated by JavaScript -->
-              </div>
-            </div>
-
-            <!-- Detailed Grid Cards -->
-            <div class="details-grid">
-              
-              <!-- Air Quality Index Widget -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>AIR QUALITY INDEX</span>
-                  <i data-lucide="wind" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div>
-                  <div id="aqi-label-val" class="details-card-value">2 - Fair</div>
-                  <div class="aqi-bar-container">
-                    <div id="aqi-bar-fill" class="aqi-bar-fill"></div>
-                  </div>
-                </div>
-                <div class="aqi-breakdown">
-                  <div>
-                    <span>PM2.5</span>
-                    <span id="aqi-pm25" class="aqi-comp-val">12</span>
-                  </div>
-                  <div>
-                    <span>PM10</span>
-                    <span id="aqi-pm10" class="aqi-comp-val">20</span>
-                  </div>
-                  <div>
-                    <span>CO</span>
-                    <span id="aqi-co" class="aqi-comp-val">280</span>
-                  </div>
-                  <div>
-                    <span>NO₂</span>
-                    <span id="aqi-no2" class="aqi-comp-val">15</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- UV Index Gauge Widget -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>UV INDEX</span>
-                  <i data-lucide="sun" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div class="uv-gauge-container">
-                  <svg class="uv-svg" viewBox="0 0 100 50">
-                    <path class="uv-track" d="M 10 50 A 40 40 0 0 1 90 50" />
-                    <path id="uv-gauge-fill" class="uv-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
-                  </svg>
-                  <div id="uv-value" class="uv-needle-val">0</div>
-                </div>
-                <div id="uv-level-txt" class="details-card-footer text-center">Low Exposure</div>
-              </div>
-
-              <!-- Wind Velocity Compass Widget -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>WIND CONDITIONS</span>
-                  <i data-lucide="compass" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div class="wind-widget-container">
-                  <div class="wind-compass">
-                    <span class="compass-direction direction-n">N</span>
-                    <span class="compass-direction direction-e">E</span>
-                    <span class="compass-direction direction-s">S</span>
-                    <span class="compass-direction direction-w">W</span>
-                    <div id="compass-needle" class="compass-needle"></div>
-                  </div>
-                  <div class="wind-text-block">
-                    <div id="wind-speed-val" class="wind-speed-val">12 km/h</div>
-                    <div id="wind-dir-val" class="wind-dir-val">North-East (45&deg;)</div>
-                  </div>
-                </div>
-                <div id="wind-gust-val" class="details-card-footer">Gusts up to 18 km/h</div>
-              </div>
-
-              <!-- Humidity Liquid droplet bar Widget -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>HUMIDITY</span>
-                  <i data-lucide="droplet" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div class="humidity-container">
-                  <div id="humidity-value" class="details-card-value humidity-val">68%</div>
-                  <div class="humidity-droplet-bar">
-                    <div id="humidity-droplet-fill" class="humidity-droplet-fill">
-                      <div class="humidity-droplet-bubble"></div>
-                      <div class="humidity-droplet-bubble"></div>
-                    </div>
-                  </div>
-                </div>
-                <div id="dew-point-val" class="details-card-footer">Dew point is 12&deg;C right now</div>
-              </div>
-
-              <!-- Atmospheric Pressure Card -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>ATMOSPHERIC PRESSURE</span>
-                  <i data-lucide="gauge" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div>
-                  <div id="pressure-value" class="details-card-value">1013 hPa</div>
-                </div>
-                <div id="pressure-footer" class="details-card-footer">Normal sea-level pressure</div>
-              </div>
-
-              <!-- Visibility Range Card -->
-              <div class="glass-card details-card">
-                <div class="details-card-header">
-                  <span>VISIBILITY RANGE</span>
-                  <i data-lucide="eye" aria-hidden="true"><!-- icon --></i>
-                </div>
-                <div>
-                  <div id="visibility-value" class="details-card-value">10 km</div>
-                </div>
-                <div id="visibility-footer" class="details-card-footer">Perfectly clear view</div>
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- Bottom Section: Map Container -->
-          
-
-        </div>
+        </section>
 
       </div>
-    </section>
+    </div>
   </main>
 
-  <!-- Settings Configuration Modal -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- FOOTER                                                 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="footer-logo" src="Img/Oltag_logo_Weather.png" alt="OLTag Weathera">
+          <span class="footer-brand-name">OLTag Weathera</span>
+          <p class="footer-tagline">Premium weather intelligence at your fingertips.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h4 class="footer-nav-title">Quick Links</h4>
+          <a href="#" class="footer-link">Dashboard</a>
+          <a href="#" class="footer-link" onclick="document.querySelector('.radar-section').scrollIntoView({behavior:'smooth'});return false;">Radar</a>
+          <a href="#" class="footer-link" onclick="document.querySelector('.forecast-section').scrollIntoView({behavior:'smooth'});return false;">Forecast</a>
+          <a href="#" class="footer-link" onclick="document.getElementById('settings-modal-btn').click();return false;">Settings</a>
+        </nav>
+        <div class="footer-social">
+          <h4 class="footer-nav-title">Connect</h4>
+          <div class="social-icons">
+            <a href="#" class="social-link" aria-label="Instagram"><i data-lucide="instagram" aria-hidden="true"><!-- icon --></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i data-lucide="twitter" aria-hidden="true"><!-- icon --></i></a>
+            <a href="#" class="social-link" aria-label="Facebook"><i data-lucide="facebook" aria-hidden="true"><!-- icon --></i></a>
+            <a href="#" class="social-link" aria-label="GitHub"><i data-lucide="github" aria-hidden="true"><!-- icon --></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 OLTag Weathera. All rights reserved.</span>
+        <span class="footer-credits">Powered by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &middot; Maps by <a href="https://carto.com/" target="_blank" rel="noopener noreferrer">CARTO</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SETTINGS MODAL                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
   <div id="settings-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="settings-title">
     <div class="modal-content">
       <div class="modal-header">
@@ -405,10 +506,8 @@
           <i data-lucide="x" aria-hidden="true"><!-- icon --></i>
         </button>
       </div>
-      
       <div class="modal-body">
-        
-        <!-- API Key settings input -->
+        <!-- API Key -->
         <div class="settings-input-group">
           <label for="api-key-input" class="settings-label">OpenWeatherMap API Key</label>
           <input type="password" id="api-key-input" class="settings-input" placeholder="Paste your API key here...">
@@ -416,8 +515,7 @@
             Don&apos;t have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" class="api-link">openweathermap.org</a>.
           </p>
         </div>
-
-        <!-- Mode Select (Live API vs Mock Mode) -->
+        <!-- Demo Mode -->
         <div class="toggle-switch-row">
           <div>
             <span class="demo-title">Demo / Mock Mode</span>
@@ -428,8 +526,7 @@
             <span class="switch-slider"></span>
           </label>
         </div>
-
-        <!-- Custom Mock Condition Option -->
+        <!-- Mock Condition -->
         <div id="mock-condition-group" class="settings-input-group hidden">
           <label for="mock-condition-select" class="settings-label">Simulated Weather Condition</label>
           <select id="mock-condition-select" class="settings-input mock-select">
@@ -441,9 +538,7 @@
             <option value="Mist" class="mock-option">Mist / Fog</option>
           </select>
         </div>
-
       </div>
-
       <div class="modal-footer">
         <button id="reset-settings-btn" class="btn btn-secondary">Clear Cache</button>
         <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
@@ -451,7 +546,7 @@
     </div>
   </div>
 
-  <!-- Floating Action Buttons -->
+  <!-- Floating Quick Actions -->
   <div class="quick-actions-bar">
     <button id="copy-report-btn" class="float-action-btn" aria-label="Copy Weather Report Summary">
       <i data-lucide="copy" aria-hidden="true"><!-- icon --></i>
@@ -461,13 +556,9 @@
     </button>
   </div>
 
-  <!-- Leaflet JS for Weather Map -->
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  
-  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
-  
-  <!-- Custom Core Application Script -->
   <script src="js/script.js"></script>
 </body>
 </html>

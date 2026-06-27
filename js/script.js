@@ -346,6 +346,33 @@ function bindEvents() {
   elements.saveSettingsBtn.addEventListener("click", () => saveSettings());
   elements.resetSettingsBtn.addEventListener("click", () => resetSettings());
 
+  // Sidebar Drawer Open/Close bindings
+  const drawer = document.getElementById("sidebar-drawer");
+  const backdrop = document.getElementById("drawer-backdrop");
+  const toggleBtn = document.getElementById("sidebar-toggle-btn");
+  const closeBtn = document.getElementById("drawer-close-btn");
+
+  if (toggleBtn && drawer && backdrop) {
+    toggleBtn.addEventListener("click", () => {
+      drawer.classList.add("active");
+      backdrop.classList.add("active");
+    });
+  }
+
+  if (closeBtn && drawer && backdrop) {
+    closeBtn.addEventListener("click", () => {
+      drawer.classList.remove("active");
+      backdrop.classList.remove("active");
+    });
+  }
+
+  if (backdrop && drawer) {
+    backdrop.addEventListener("click", () => {
+      drawer.classList.remove("active");
+      backdrop.classList.remove("active");
+    });
+  }
+
   // Quick Actions (Copy & Share)
   elements.copyReportBtn.addEventListener("click", () => copyWeatherReport());
   elements.shareWeatherBtn.addEventListener("click", () => shareWeatherDetails());
@@ -550,6 +577,9 @@ function updateStateAndRender(weather, forecast, aqi) {
   renderHourlyForecast();
   renderFiveDayForecast();
   renderDetailsGrid();
+  renderWeatherTips();
+  renderMoonPhase();
+  renderWeeklySummary();
 
   // Update map visual
   if (state.leafletMap) {
@@ -672,6 +702,9 @@ function toggleUnit() {
   renderHourlyForecast();
   renderFiveDayForecast();
   renderDetailsGrid();
+  renderWeatherTips();
+  renderMoonPhase();
+  renderWeeklySummary();
 
   showToast(`Switched units to °${state.unit}.`, "info");
 }
@@ -717,7 +750,7 @@ function renderWeatherHeroCard() {
   const w = state.activeWeatherData;
   if (!w) return;
 
-  elements.cityName.textContent = `${w.name}, ${w.sys.country}`;
+  elements.cityName.textContent = `${getCountryFlagEmoji(w.sys.country)} ${w.name}, ${w.sys.country}`;
 
   // Get date in target timezone or localized format
   const dateOptions = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
@@ -1047,6 +1080,35 @@ function renderDetailsGrid() {
     elements.visibilityFooter.textContent = "Light haze or cloud cover";
   } else {
     elements.visibilityFooter.textContent = "Foggy, reduced visibility";
+  }
+
+  // 7. Dew point card
+  const dewPointValCard = document.getElementById("dew-point-card-value");
+  const dewPointFooterCard = document.getElementById("dew-point-card-footer");
+  if (dewPointValCard && dewPointFooterCard) {
+    dewPointValCard.textContent = `${formatTemp(dewPointC)}°${state.unit}`;
+    if (dewPointC > 20) {
+      dewPointFooterCard.textContent = "High humidity — feels muggy and sticky";
+    } else if (dewPointC < 10) {
+      dewPointFooterCard.textContent = "Dry air — pleasant comfort level";
+    } else {
+      dewPointFooterCard.textContent = "Moderate moisture — comfortable air";
+    }
+  }
+
+  // 8. Cloud cover card
+  const cloudValCard = document.getElementById("cloud-cover-value");
+  const cloudFooterCard = document.getElementById("cloud-cover-footer");
+  if (cloudValCard && cloudFooterCard) {
+    const cloudsPercent = w.clouds.all;
+    cloudValCard.textContent = `${cloudsPercent}%`;
+    if (cloudsPercent > 70) {
+      cloudFooterCard.textContent = "Mostly cloudy, overcast skies";
+    } else if (cloudsPercent > 30) {
+      cloudFooterCard.textContent = "Partly cloudy with sunny intervals";
+    } else {
+      cloudFooterCard.textContent = "Clear sky, minimal cloud coverage";
+    }
   }
 }
 
@@ -1450,4 +1512,238 @@ function generateSimulatedWeatherData(cityName, customLat, customLon) {
   };
 
   return { weather, forecast, aqi };
+}
+
+
+// --- Redesigned Dashboard Extras Renderers ---
+
+// Algorithmic ISO country code to flag emoji translator
+function getCountryFlagEmoji(countryCode) {
+  if (!countryCode) return "";
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}
+
+// Today's weather-specific tips generator
+function renderWeatherTips() {
+  const w = state.activeWeatherData;
+  const tipsContainer = document.getElementById("weather-tips-grid");
+  if (!w || !tipsContainer) return;
+  
+  const tips = [];
+  
+  // 1. Temperature Tips
+  const temp = w.main.temp;
+  if (temp > 33) {
+    tips.push({
+      title: "Hydration Alert",
+      desc: "Extreme heat detected. Drink plenty of water and avoid direct sunlight.",
+      icon: "flame"
+    });
+  } else if (temp < 10) {
+    tips.push({
+      title: "Warm Layers",
+      desc: "Cold weather advisory. Wear layers and stay insulated when going outdoors.",
+      icon: "snowflake"
+    });
+  } else {
+    tips.push({
+      title: "Mild Weather",
+      desc: "Optimal temperature conditions. Great day for outdoor activities.",
+      icon: "smile"
+    });
+  }
+  
+  // 2. UV Protection Tips
+  let uvVal = 0;
+  if (state.demoMode) {
+    const hours = new Date().getHours();
+    if (hours > 6 && hours < 18) {
+      const mockCondition = elements.mockConditionSelect.value;
+      const baseUv = mockCondition === "Clear" ? 8 : (mockCondition === "Clouds" ? 3 : 1);
+      uvVal = Math.round(baseUv * Math.sin((hours - 6) / 12 * Math.PI));
+    }
+  } else {
+    const latAbs = Math.abs(w.coord.lat);
+    const hour = new Date().getHours();
+    if (hour > 5 && hour < 19) {
+      const sunElevation = Math.sin((hour - 5) / 13 * Math.PI);
+      const isCloudy = w.clouds.all > 50;
+      const base = latAbs < 20 ? 11 : (latAbs < 40 ? 8 : 4);
+      uvVal = Math.max(0, Math.round(base * sunElevation * (isCloudy ? 0.4 : 1.0)));
+    }
+  }
+  
+  if (uvVal >= 6) {
+    tips.push({
+      title: "Sun Protection",
+      desc: "High UV index. Apply sunscreen (SPF 30+), wear a hat, and seek shade.",
+      icon: "shield-alert"
+    });
+  } else if (uvVal >= 3) {
+    tips.push({
+      title: "Moderate UV",
+      desc: "Safe conditions for short periods. Take care during peak afternoon hours.",
+      icon: "sun"
+    });
+  } else {
+    tips.push({
+      title: "Safe Outdoors",
+      desc: "Very low UV rays. Safe to enjoy sunlight without special protection.",
+      icon: "sun-dim"
+    });
+  }
+  
+  // 3. Precipitation & Humidity Tips
+  const mainCond = w.weather[0].main.toLowerCase();
+  if (mainCond.includes("rain") || mainCond.includes("drizzle")) {
+    tips.push({
+      title: "Carry Umbrella",
+      desc: "Rain detected. Wet roads and low visibility. Carry waterproof gear.",
+      icon: "umbrella"
+    });
+  } else if (mainCond.includes("thunderstorm")) {
+    tips.push({
+      title: "Seek Shelter",
+      desc: "Thunderstorm active. Avoid tall trees and outdoor fields. Stay indoors.",
+      icon: "zap"
+    });
+  } else if (mainCond.includes("snow")) {
+    tips.push({
+      title: "Slippery Roads",
+      desc: "Snow active. Extreme caution required while walking or driving.",
+      icon: "alert-circle"
+    });
+  } else {
+    tips.push({
+      title: "Active Day",
+      desc: "No precipitation. Great opportunity for jogging or sports.",
+      icon: "sparkles"
+    });
+  }
+  
+  tipsContainer.innerHTML = tips.map(tip => `
+    <div class="glass-card tip-card">
+      <div class="tip-icon-wrapper">
+        <i data-lucide="${tip.icon}"></i>
+      </div>
+      <div class="tip-content">
+        <h3>${tip.title}</h3>
+        <p>${tip.desc}</p>
+      </div>
+    </div>
+  `).join("");
+  
+  lucide.createIcons();
+}
+
+// Algorithmic moon phase visualizer
+function renderMoonPhase() {
+  const moonNameEl = document.getElementById("moon-phase-name");
+  const moonIllumEl = document.getElementById("moon-illumination");
+  const moonShadowEl = document.getElementById("moon-shadow-path");
+  if (!moonNameEl || !moonIllumEl || !moonShadowEl) return;
+  
+  const date = new Date();
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  
+  let c = 0, e = 0, jd = 0, b = 0;
+  
+  if (month < 3) {
+    const tempYear = year - 1;
+    const tempMonth = month + 12;
+    c = 365.25 * tempYear;
+    e = 30.6 * tempMonth;
+  } else {
+    c = 365.25 * year;
+    e = 30.6 * month;
+  }
+  
+  jd = c + e + day - 694039.09;
+  jd /= 29.5305882;
+  b = parseInt(jd);
+  jd -= b; // fractional part of lunar cycle (0.0 to 1.0)
+  
+  const phase = jd;
+  const illumination = Math.round(Math.abs(Math.sin(phase * Math.PI)) * 100);
+  
+  let phaseName = "";
+  let shadowD = "";
+  
+  if (phase < 0.03 || phase > 0.97) {
+    phaseName = "New Moon";
+    shadowD = "M 50,5 A 45,45 0 0,0 50,95 A 45,45 0 0,0 50,5 Z";
+  } else if (phase < 0.22) {
+    phaseName = "Waxing Crescent";
+    const rad = 45 * (1 - 4 * phase);
+    shadowD = `M 50,5 A 45,45 0 0,1 50,95 A ${Math.abs(rad)},45 0 0,${rad < 0 ? 1 : 0} 50,5`;
+  } else if (phase < 0.28) {
+    phaseName = "First Quarter";
+    shadowD = "M 50,5 A 45,45 0 0,1 50,95 A 0,45 0 0,1 50,5";
+  } else if (phase < 0.47) {
+    phaseName = "Waxing Gibbous";
+    const rad = 45 * (4 * (phase - 0.25) - 1);
+    shadowD = `M 50,5 A 45,45 0 0,1 50,95 A ${Math.abs(rad)},45 0 0,${rad < 0 ? 0 : 1} 50,5`;
+  } else if (phase < 0.53) {
+    phaseName = "Full Moon";
+    shadowD = "M 50,5 A 45,45 0 0,1 50,95 A 45,45 0 0,1 50,5 Z";
+  } else if (phase < 0.72) {
+    phaseName = "Waning Gibbous";
+    const rad = 45 * (1 - 4 * (phase - 0.5));
+    shadowD = `M 50,5 A 45,45 0 0,0 50,95 A ${Math.abs(rad)},45 0 0,${rad < 0 ? 0 : 1} 50,5`;
+  } else if (phase < 0.78) {
+    phaseName = "Third Quarter";
+    shadowD = "M 50,5 A 45,45 0 0,0 50,95 A 0,45 0 0,0 50,5";
+  } else {
+    phaseName = "Waning Crescent";
+    const rad = 45 * (4 * (phase - 0.75) - 1);
+    shadowD = `M 50,5 A 45,45 0 0,0 50,95 A ${Math.abs(rad)},45 0 0,${rad < 0 ? 1 : 0} 50,5`;
+  }
+  
+  moonNameEl.textContent = phaseName;
+  moonIllumEl.textContent = `${illumination}% illuminated`;
+  
+  if (phaseName === "New Moon") {
+    moonShadowEl.setAttribute("d", "M 50,5 A 45,45 0 1,1 49.99,5 Z");
+    moonShadowEl.style.fill = "#1e293b";
+  } else if (phaseName === "Full Moon") {
+    moonShadowEl.setAttribute("d", "M 50,5 A 45,45 0 1,1 49.99,5 Z");
+    moonShadowEl.style.fill = "#fef08a";
+  } else {
+    moonShadowEl.setAttribute("d", shadowD);
+    moonShadowEl.style.fill = "#fef08a";
+  }
+}
+
+// 5-day weather forecast text synthesizer
+function renderWeeklySummary() {
+  const summaryTextEl = document.getElementById("weekly-summary-text");
+  const f = state.activeForecastData;
+  if (!f || !summaryTextEl) return;
+  
+  const temps = f.list.map(item => item.main.temp);
+  const minTemp = formatTemp(Math.min(...temps));
+  const maxTemp = formatTemp(Math.max(...temps));
+  
+  const conditions = {};
+  f.list.forEach(item => {
+    const cond = item.weather[0].main;
+    conditions[cond] = (conditions[cond] || 0) + 1;
+  });
+  
+  const dominantCondition = Object.keys(conditions).reduce((a, b) => conditions[a] > conditions[b] ? a : b);
+  
+  let condDesc = "moderate weather patterns";
+  if (dominantCondition.toLowerCase() === "clear") condDesc = "mostly clear skies and sunny days";
+  else if (dominantCondition.toLowerCase() === "clouds") condDesc = "overcast and cloudy skies";
+  else if (dominantCondition.toLowerCase() === "rain") condDesc = "periodic rain showers";
+  else if (dominantCondition.toLowerCase() === "thunderstorm") condDesc = "potential thunderstorms and unstable skies";
+  else if (dominantCondition.toLowerCase() === "snow") condDesc = "snowfall and freezing conditions";
+  
+  summaryTextEl.textContent = `Over the next 5 days, the area will experience ${condDesc}. Temperatures will range from a cool low of ${minTemp}°${state.unit} to a high of ${maxTemp}°${state.unit}. Plan your outdoor events accordingly, and check details on the hourly forecast.`;
 }
