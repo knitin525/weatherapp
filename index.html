@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A premium, highly interactive glassmorphism Weather Web Application featuring dynamic weather backgrounds, a 5-day forecast, air quality indices, interactive maps, and real-time alerts.">
+  <title>OLTag Weathera - Premium Weather Web App</title>
+  
+  <!-- Preload fonts for optimized rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Leaflet CSS for Weather Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Page Loader Overlay -->
+  <div id="page-loader" class="page-loader" aria-hidden="true">
+    <div class="spinner"></div>
+    <div class="loader-text">Loading Weather Patterns...</div>
+  </div>
+
+  <!-- Toast Notification Center -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- App Header -->
+  <header>
+    <a href="#" class="brand" aria-label="OLTag Weathera Home">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42-1.04-1.21-1.88-2.22-2.38A4.75 4.75 0 0 0 6.5 11.5c-1.32.22-2.5.94-3.23 2A3.5 3.5 0 0 0 6.5 19z"/>
+      </svg>
+      <span>OLTag Weathera</span>
+    </a>
+
+    <!-- Weather Search -->
+    <div class="search-container">
+      <div class="search-wrapper">
+        <i data-lucide="search" style="color: var(--text-secondary); width: 18px; height: 18px;"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Search city (e.g. London, Tokyo)..." aria-label="Search city weather" autocomplete="off">
+        <button id="clear-search-btn" class="search-btn" style="display: none;" aria-label="Clear search input">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+        <button id="search-btn" class="search-btn" aria-label="Submit search query">
+          <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+      <!-- Autocomplete Dropdown List -->
+      <div id="autocomplete-dropdown" class="autocomplete-dropdown" role="listbox" aria-label="City suggestions"></div>
+    </div>
+
+    <!-- Actions Control Panel -->
+    <div class="header-actions">
+      <button id="location-btn" class="action-btn" aria-label="Use my current location">
+        <i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>
+      </button>
+      <button id="theme-toggle" class="action-btn" aria-label="Toggle Light/Dark Theme">
+        <i data-lucide="moon" class="theme-icon-dark" style="width: 18px; height: 18px;"></i>
+      </button>
+      <button id="unit-toggle" class="action-btn unit-toggle" aria-label="Toggle Temperature Unit">
+        °C
+      </button>
+      <button id="settings-modal-btn" class="action-btn" aria-label="Open Application Settings">
+        <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Dashboard Main Layout -->
+  <main>
+    <!-- Left Sidebar (Favorites & Recents) -->
+    <section class="sidebar" aria-label="Saved Cities and History">
+      <!-- Favorite Cities Card -->
+      <div class="glass-card">
+        <h2 class="sidebar-title">
+          <i data-lucide="heart" style="color: #ff4757; fill: #ff4757; width: 18px; height: 18px;"></i>
+          Favorites
+        </h2>
+        <ul id="favorites-list" class="sidebar-list">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+
+      <!-- Recent Searches Card -->
+      <div class="glass-card">
+        <h2 class="sidebar-title">
+          <i data-lucide="history" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+          Recent Searches
+        </h2>
+        <ul id="recents-list" class="sidebar-list">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- Dashboard Content Pane -->
+    <section class="dashboard-content" aria-label="Weather Dashboard Results">
+      
+      <!-- Skeleton Container (Visible during loading) -->
+      <div id="dashboard-skeleton" style="display: none;" aria-hidden="true">
+        <div class="weather-hero-row" style="margin-bottom: 2rem;">
+          <div class="glass-card skeleton skeleton-card" style="height: 280px;">
+            <div class="skeleton-text title"></div>
+            <div class="skeleton-text subtitle"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+              <div class="skeleton-text" style="width: 40%; height: 3.5rem;"></div>
+              <div class="skeleton-circle"></div>
+            </div>
+          </div>
+          <div class="glass-card skeleton skeleton-card" style="height: 280px;">
+            <div class="skeleton-text subtitle" style="width: 50%;"></div>
+            <div class="skeleton-circle" style="margin: 1rem auto; width: 100px; height: 100px;"></div>
+          </div>
+        </div>
+        <div class="details-forecast-row">
+          <div class="forecast-column">
+            <div class="glass-card skeleton skeleton-card" style="height: 350px;"></div>
+          </div>
+          <div class="details-grid">
+            <div class="glass-card skeleton" style="height: 160px;"></div>
+            <div class="glass-card skeleton" style="height: 160px;"></div>
+            <div class="glass-card skeleton" style="height: 160px;"></div>
+            <div class="glass-card skeleton" style="height: 160px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Dashboard Output (Fades in when loaded) -->
+      <div id="dashboard-results">
+
+        <!-- Error Messages (Fills page when city not found / offline) -->
+        <div id="error-card" class="inline-error-container" style="display: none;">
+          <div id="error-icon" class="inline-error-icon">
+            <i data-lucide="cloud-off"></i>
+          </div>
+          <h2 id="error-title" class="inline-error-title">No Connection Available</h2>
+          <p id="error-desc" class="inline-error-msg">Please check your internet connection and try again.</p>
+        </div>
+
+        <!-- Weather Display Layout Grid -->
+        <div id="weather-dashboard-view" class="fade-in">
+          
+          <!-- Hero Section: Main Weather Details & Sunrise/Sunset Graphic -->
+          <div class="weather-hero-row" style="margin-bottom: 2rem;">
+            
+            <!-- Hero weather stats card -->
+            <div class="glass-card hero-card">
+              <div class="hero-header">
+                <div class="location-info">
+                  <h1 id="city-name">Paris</h1>
+                  <p id="current-datetime">Saturday, June 27, 2026</p>
+                </div>
+                <button id="favorite-btn" class="hero-fav-btn" aria-label="Bookmark this city">
+                  <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
+                </button>
+              </div>
+              
+              <div class="hero-body">
+                <div class="temperature-display">
+                  <span id="temp-value" class="temp-num">24</span>
+                  <span id="temp-unit-label" class="temp-unit">°C</span>
+                </div>
+                <div class="weather-status-wrapper">
+                  <img id="weather-icon-img" src="" alt="Weather Condition Icon" class="hero-weather-icon">
+                  <span id="weather-condition-txt" class="weather-condition">Partly Cloudy</span>
+                  <span id="weather-desc-txt" class="weather-desc">scattered clouds</span>
+                </div>
+              </div>
+              
+              <div class="hero-footer">
+                <div>Feels Like: <span id="feels-like-val" class="feels-like-val">25°C</span></div>
+                <div id="weather-alert-badge" style="display: none; color: var(--danger-color); font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
+                  <i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> Alert Active
+                </div>
+                <div>Local Time: <span id="local-time-val" style="font-weight: 600; color: var(--text-primary);">12:30 PM</span></div>
+              </div>
+            </div>
+
+            <!-- Sunrise & Sunset Tracker Card -->
+            <div class="glass-card sun-track-card">
+              <h3 class="sun-card-title">Sunrise & Sunset</h3>
+              <div class="sun-track-container">
+                <svg class="sun-track-svg" viewBox="0 0 240 100" preserveAspectRatio="none">
+                  <!-- Dashed curve track representing the sun's trajectory -->
+                  <path id="sun-path-bg" class="sun-path-bg" d="M 10 90 A 110 80 0 0 1 230 90" />
+                  <!-- Colored fill path matching progress of the day -->
+                  <path id="sun-path-active" class="sun-path-active" d="M 10 90 A 110 80 0 0 1 230 90" stroke-dasharray="350 350" />
+                  
+                  <!-- Glowing SVG Sun Pointer -->
+                  <g id="sun-pointer" class="sun-element" transform="translate(10, 90)">
+                    <circle cx="0" cy="0" r="10" class="sun-element-glow" />
+                    <circle cx="0" cy="0" r="6" class="sun-element-core" />
+                  </g>
+                </svg>
+              </div>
+              
+              <div class="sun-times-row">
+                <div class="sun-time-block">
+                  <i data-lucide="sunrise"></i>
+                  <div>
+                    <span class="sun-label">Sunrise</span>
+                    <span id="sunrise-time-val" class="sun-time">05:42 AM</span>
+                  </div>
+                </div>
+                <div class="sun-time-block" style="text-align: right;">
+                  <div>
+                    <span class="sun-label">Sunset</span>
+                    <span id="sunset-time-val" class="sun-time">09:12 PM</span>
+                  </div>
+                  <i data-lucide="sunset"></i>
+                </div>
+              </div>
+              <div id="sun-remaining" class="sun-remaining-txt">8 hours of daylight remaining</div>
+            </div>
+
+          </div>
+
+          <!-- Hourly 24h Forecast Panel -->
+          <div class="hourly-forecast-row" style="margin-bottom: 2rem;">
+            <h2 class="row-title">
+              <i data-lucide="clock" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+              Hourly Forecast
+            </h2>
+            <div id="hourly-scroll-container" class="hourly-scroll-container">
+              <!-- Populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Mid Section: 5-Day Forecast & Extra Grid Detail Cards -->
+          <div class="details-forecast-row" style="margin-bottom: 2rem;">
+            
+            <!-- 5-Day Forecast Panel -->
+            <div class="forecast-column">
+              <h2 class="row-title">
+                <i data-lucide="calendar" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+                5-Day Forecast
+              </h2>
+              <div id="forecast-list" class="forecast-list">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Detailed Grid Cards -->
+            <div class="details-grid">
+              
+              <!-- Air Quality Index Widget -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>AIR QUALITY INDEX</span>
+                  <i data-lucide="wind"></i>
+                </div>
+                <div>
+                  <div id="aqi-label-val" class="details-card-value">2 - Fair</div>
+                  <div class="aqi-bar-container">
+                    <div id="aqi-bar-fill" class="aqi-bar-fill"></div>
+                  </div>
+                </div>
+                <div class="aqi-breakdown">
+                  <div>
+                    <span>PM2.5</span>
+                    <span id="aqi-pm25" class="aqi-comp-val">12</span>
+                  </div>
+                  <div>
+                    <span>PM10</span>
+                    <span id="aqi-pm10" class="aqi-comp-val">20</span>
+                  </div>
+                  <div>
+                    <span>CO</span>
+                    <span id="aqi-co" class="aqi-comp-val">280</span>
+                  </div>
+                  <div>
+                    <span>NO₂</span>
+                    <span id="aqi-no2" class="aqi-comp-val">15</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- UV Index Gauge Widget -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>UV INDEX</span>
+                  <i data-lucide="sun"></i>
+                </div>
+                <div class="uv-gauge-container">
+                  <svg class="uv-svg" viewBox="0 0 100 50">
+                    <path class="uv-track" d="M 10 50 A 40 40 0 0 1 90 50" />
+                    <path id="uv-gauge-fill" class="uv-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                  </svg>
+                  <div id="uv-value" class="uv-needle-val">0</div>
+                </div>
+                <div id="uv-level-txt" class="details-card-footer" style="text-align: center;">Low Exposure</div>
+              </div>
+
+              <!-- Wind Velocity Compass Widget -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>WIND CONDITIONS</span>
+                  <i data-lucide="compass"></i>
+                </div>
+                <div class="wind-widget-container">
+                  <div class="wind-compass">
+                    <span class="compass-direction direction-n">N</span>
+                    <span class="compass-direction direction-e">E</span>
+                    <span class="compass-direction direction-s">S</span>
+                    <span class="compass-direction direction-w">W</span>
+                    <div id="compass-needle" class="compass-needle"></div>
+                  </div>
+                  <div class="wind-text-block">
+                    <div id="wind-speed-val" style="font-size: 1.4rem; font-weight: 800; font-family: var(--font-heading);">12 km/h</div>
+                    <div id="wind-dir-val" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">North-East (45°)</div>
+                  </div>
+                </div>
+                <div id="wind-gust-val" class="details-card-footer">Gusts up to 18 km/h</div>
+              </div>
+
+              <!-- Humidity Liquid droplet bar Widget -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>HUMIDITY</span>
+                  <i data-lucide="droplet"></i>
+                </div>
+                <div class="humidity-container">
+                  <div id="humidity-value" class="details-card-value" style="font-size: 2.2rem; min-width: 60px;">68%</div>
+                  <div class="humidity-droplet-bar">
+                    <div id="humidity-droplet-fill" class="humidity-droplet-fill">
+                      <div class="humidity-droplet-bubble" style="animation-delay: 0s;"></div>
+                      <div class="humidity-droplet-bubble" style="animation-delay: 1.5s; left: 18px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div id="dew-point-val" class="details-card-footer">Dew point is 12°C right now</div>
+              </div>
+
+              <!-- Atmospheric Pressure Card -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>ATMOSPHERIC PRESSURE</span>
+                  <i data-lucide="gauge"></i>
+                </div>
+                <div>
+                  <div id="pressure-value" class="details-card-value">1013 hPa</div>
+                </div>
+                <div id="pressure-footer" class="details-card-footer">Normal sea-level pressure</div>
+              </div>
+
+              <!-- Visibility Range Card -->
+              <div class="glass-card details-card">
+                <div class="details-card-header">
+                  <span>VISIBILITY RANGE</span>
+                  <i data-lucide="eye"></i>
+                </div>
+                <div>
+                  <div id="visibility-value" class="details-card-value">10 km</div>
+                </div>
+                <div id="visibility-footer" class="details-card-footer">Perfectly clear view</div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Bottom Section: Map Container -->
+          <div class="map-row-container">
+            <h2 class="row-title">
+              <i data-lucide="map" style="color: var(--accent-color); width: 18px; height: 18px;"></i>
+              Interactive Location Map
+            </h2>
+            <div class="map-wrapper">
+              <div id="weather-map"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Settings Configuration Modal -->
+  <div id="settings-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="settings-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="settings-title" class="modal-title">Application Settings</h2>
+        <button id="close-modal-btn" class="modal-close-btn" aria-label="Close modal dialog">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        
+        <!-- API Key settings input -->
+        <div class="settings-input-group">
+          <label for="api-key-input" class="settings-label">OpenWeatherMap API Key</label>
+          <input type="password" id="api-key-input" class="settings-input" placeholder="Paste your API key here...">
+          <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            Don't have a key? Get one for free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">openweathermap.org</a>.
+          </p>
+        </div>
+
+        <!-- Mode Select (Live API vs Mock Mode) -->
+        <div class="toggle-switch-row">
+          <div>
+            <span style="font-weight: 600; display: block; font-size: 0.95rem;">Demo / Mock Mode</span>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Load realistic simulated datasets without an API Key</span>
+          </div>
+          <label class="switch" aria-label="Toggle Demo Mode">
+            <input type="checkbox" id="demo-mode-checkbox">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Custom Mock Condition Option -->
+        <div id="mock-condition-group" class="settings-input-group" style="display: none;">
+          <label for="mock-condition-select" class="settings-label">Simulated Weather Condition</label>
+          <select id="mock-condition-select" class="settings-input" style="background-color: rgba(255,255,255,0.04); border-color: var(--card-border);">
+            <option value="Clear" style="background: #0f172a; color: #fff;">Clear / Sunny</option>
+            <option value="Rain" style="background: #0f172a; color: #fff;">Rainy</option>
+            <option value="Thunderstorm" style="background: #0f172a; color: #fff;">Thunderstorm</option>
+            <option value="Snow" style="background: #0f172a; color: #fff;">Snowy</option>
+            <option value="Clouds" style="background: #0f172a; color: #fff;">Cloudy</option>
+            <option value="Mist" style="background: #0f172a; color: #fff;">Mist / Fog</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="reset-settings-btn" class="btn btn-secondary">Clear Cache</button>
+        <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons -->
+  <div class="quick-actions-bar">
+    <button id="copy-report-btn" class="float-action-btn" aria-label="Copy Weather Report Summary">
+      <i data-lucide="copy" style="width: 22px; height: 22px;"></i>
+    </button>
+    <button id="share-weather-btn" class="float-action-btn" aria-label="Share Weather Details">
+      <i data-lucide="share-2" style="width: 22px; height: 22px;"></i>
+    </button>
+  </div>
+
+  <!-- Leaflet JS for Weather Map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  
+  <!-- Custom Core Application Script -->
+  <script src="js/script.js"></script>
+</body>
+</html>
