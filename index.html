@@ -216,6 +216,33 @@
 
           </div>
 
+          <!-- WeatherRadar Live Map Container (Re-positioned for Weather & Radar Redesign) -->
+          <div class="map-row-container mb-2">
+            <div class="radar-header">
+              <h2 class="row-title">
+                <i data-lucide="map" aria-hidden="true"><!-- icon --></i>
+                WeatherRadar
+              </h2>
+              <div class="radar-controls">
+                <button class="radar-tab-btn active" data-layer="precipitation_new" aria-label="Toggle precipitation radar">
+                  <i data-lucide="droplets" aria-hidden="true"><!-- icon --></i> Rain
+                </button>
+                <button class="radar-tab-btn" data-layer="clouds_new" aria-label="Toggle cloud cover radar">
+                  <i data-lucide="cloud" aria-hidden="true"><!-- icon --></i> Clouds
+                </button>
+                <button class="radar-tab-btn" data-layer="temp_new" aria-label="Toggle temperature radar">
+                  <i data-lucide="thermometer" aria-hidden="true"><!-- icon --></i> Temperature
+                </button>
+                <button class="radar-tab-btn" data-layer="wind_new" aria-label="Toggle wind speed radar">
+                  <i data-lucide="wind" aria-hidden="true"><!-- icon --></i> Wind
+                </button>
+              </div>
+            </div>
+            <div class="map-wrapper">
+              <div id="weather-map"></div>
+            </div>
+          </div>
+
           <!-- Hourly 24h Forecast Panel -->
           <div class="hourly-forecast-row mb-2">
             <h2 class="row-title">
@@ -361,15 +388,7 @@
           </div>
 
           <!-- Bottom Section: Map Container -->
-          <div class="map-row-container">
-            <h2 class="row-title">
-              <i data-lucide="map" aria-hidden="true"><!-- icon --></i>
-              Interactive Location Map
-            </h2>
-            <div class="map-wrapper">
-              <div id="weather-map"></div>
-            </div>
-          </div>
+          
 
         </div>
 

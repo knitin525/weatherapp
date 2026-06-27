@@ -20,7 +20,8 @@ const state = {
   activeAqiData: null,
   leafletMap: null,
   leafletMarker: null,
-  weatherLayer: null
+  weatherLayer: null,
+  activeMapLayer: "precipitation_new"
 };
 
 // Popular global cities list for search suggestions
@@ -258,7 +259,7 @@ function addWeatherLayers(lat, lon) {
 
   // If not in demo mode, add weather layer from OpenWeatherMap (e.g. precipitation or clouds)
   if (!state.demoMode && state.apiKey !== DEFAULT_API_KEY) {
-    const layerType = "precipitation_new";
+    const layerType = state.activeMapLayer || "precipitation_new";
     const tileUrl = `https://tile.openweathermap.org/map/${layerType}/{z}/{x}/{y}.png?appid=${state.apiKey}`;
 
     state.weatherLayer = L.tileLayer(tileUrl, {
@@ -271,6 +272,25 @@ function addWeatherLayers(lat, lon) {
 
 // --- Event Binding ---
 function bindEvents() {
+  // WeatherRadar layer tab clicks
+  document.querySelectorAll(".radar-tab-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const target = e.currentTarget;
+      const layer = target.getAttribute("data-layer");
+      
+      // Toggle active states
+      document.querySelectorAll(".radar-tab-btn").forEach(b => b.classList.remove("active"));
+      target.classList.add("active");
+      
+      // Update state and reload layer
+      state.activeMapLayer = layer;
+      if (state.activeWeatherData) {
+        const lat = state.activeWeatherData.coord.lat;
+        const lon = state.activeWeatherData.coord.lon;
+        addWeatherLayers(lat, lon);
+      }
+    });
+  });
   // Search button and Enter key triggers
   elements.searchBtn.addEventListener("click", () => triggerSearch());
   elements.searchInput.addEventListener("keypress", (e) => {
