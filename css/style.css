@@ -312,6 +312,11 @@ header {
   box-shadow: var(--shadow-sm);
 }
 
+.action-btn [data-lucide] {
+  width: 18px;
+  height: 18px;
+}
+
 .action-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: var(--text-secondary);
